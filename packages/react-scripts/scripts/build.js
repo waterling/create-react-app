@@ -40,6 +40,32 @@ const measureFileSizesBeforeBuild = FileSizeReporter.measureFileSizesBeforeBuild
 const printFileSizesAfterBuild = FileSizeReporter.printFileSizesAfterBuild;
 const useYarn = fs.existsSync(paths.yarnLockFile);
 
+var argv = process.argv.slice(2);
+var target = argv[0];
+
+var appPackage  = require(paths.appPackageJson);
+
+var outpath = paths.appBuild;
+var jsExts = [];
+
+if (target) {
+  var targOpts = appPackage.targets[target];
+  if (!targOpts) {
+    throw new Error('Target "' + target + '"" is not defined in package json');
+  }
+  outpath = targOpts.outpath || paths.appBuild + '_' + target;
+  jsExts = targOpts.jsExts || ['.' + target + '.js'];
+}
+
+var opts = {
+  outpath: outpath,
+  jsExts: jsExts,
+}
+
+var config = makeConfig(opts);
+
+console.error('config: ' + JSON.stringify(config, null, 2));
+
 // Warn and crash if required files are missing
 if (!checkRequiredFiles([paths.appHtml, paths.appIndexJs])) {
   process.exit(1);
@@ -47,10 +73,10 @@ if (!checkRequiredFiles([paths.appHtml, paths.appIndexJs])) {
 
 // First, read the current file sizes in build directory.
 // This lets us display how much they changed later.
-measureFileSizesBeforeBuild(paths.appBuild).then(previousFileSizes => {
+measureFileSizesBeforeBuild(outpath).then(previousFileSizes => {
   // Remove all content but keep the directory so that
   // if you're in it, you don't end up in Trash
-  fs.emptyDirSync(paths.appBuild);
+  fs.emptyDirSync(outpath);
 
   // Start the webpack build
   build(previousFileSizes);
@@ -121,8 +147,8 @@ function build(previousFileSizes) {
         `You can control this with the ${chalk.green('homepage')} field in your ${chalk.cyan('package.json')}.`
       );
       console.log();
-      console.log(`The ${chalk.cyan('build')} folder is ready to be deployed.`);
-      console.log(`To publish it at ${chalk.green(publicUrl)}, run:`);
+      console.log('The ' + chalk.cyan(path.basename(outpath)) + ' folder is ready to be deployed.');
+      console.log('To publish it at ' + chalk.green(publicUrl) + ', run:');
       // If script deploy has been added to package.json, skip the instructions
       if (typeof appPackage.scripts.deploy === 'undefined') {
         console.log();
@@ -161,7 +187,7 @@ function build(previousFileSizes) {
         `You can control this with the ${chalk.green('homepage')} field in your ${chalk.cyan('package.json')}.`
       );
       console.log();
-      console.log(`The ${chalk.cyan('build')} folder is ready to be deployed.`);
+      console.log(`The ${chalk.cyan(path.basename(outpath))} folder is ready to be deployed.`);
       console.log();
     } else {
       if (publicUrl) {
@@ -197,14 +223,14 @@ function build(previousFileSizes) {
       } else {
         console.log(`  ${chalk.cyan('npm')} install -g serve`);
       }
-      console.log(`  ${chalk.cyan('serve')} -s build`);
+      console.log(`  ${chalk.cyan('serve')} -s ${path.basename(outpath)}`);
       console.log();
     }
   });
 }
 
 function copyPublicFolder() {
-  fs.copySync(paths.appPublic, paths.appBuild, {
+  fs.copySync(paths.appPublic, outpath, {
     dereference: true,
     filter: file => file !== paths.appHtml,
   });

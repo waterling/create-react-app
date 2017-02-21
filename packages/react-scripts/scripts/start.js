@@ -35,7 +35,8 @@ const getProcessForPort = require('react-dev-utils/getProcessForPort');
 const openBrowser = require('react-dev-utils/openBrowser');
 const prompt = require('react-dev-utils/prompt');
 const paths = require('../config/paths');
-const config = require('../config/webpack.config.dev');
+const makeCconfig = require('../config/webpack.config.dev');
+const getBuildTargetOpts = require('../config/target');
 const devServerConfig = require('../config/webpackDevServer.config');
 const createWebpackCompiler = require('./utils/createWebpackCompiler');
 const addWebpackMiddleware = require('./utils/addWebpackMiddleware');
@@ -44,6 +45,11 @@ const useYarn = fs.existsSync(paths.yarnLockFile);
 const cli = useYarn ? 'yarn' : 'npm';
 const isInteractive = process.stdout.isTTY;
 
+var argv = process.argv.slice(2);
+var target = argv[0];
+var opts = getBuildTargetOpts(target);
+var config = makeConfig(opts);
+console.error('config: ' + JSON.stringify(config, null, 2));
 // Warn and crash if required files are missing
 if (!checkRequiredFiles([paths.appHtml, paths.appIndexJs])) {
   process.exit(1);

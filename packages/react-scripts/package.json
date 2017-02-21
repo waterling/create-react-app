@@ -71,7 +71,6 @@
       "jsExts": [".ios.js", ".cor.js"]
     },
     "targ": {
-      "jsExts": []
     }
   }
 }

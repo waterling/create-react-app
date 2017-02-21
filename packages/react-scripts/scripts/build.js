@@ -31,7 +31,8 @@ const fs = require('fs-extra');
 const path = require('path');
 const url = require('url');
 const webpack = require('webpack');
-const config = require('../config/webpack.config.prod');
+const makeConfig = require('../config/webpack.config.prod');
+const getBuildTargetOpts = require('../config/target');
 const paths = require('../config/paths');
 const checkRequiredFiles = require('react-dev-utils/checkRequiredFiles');
 const FileSizeReporter = require('react-dev-utils/FileSizeReporter');
@@ -42,32 +43,9 @@ const useYarn = fs.existsSync(paths.yarnLockFile);
 
 var argv = process.argv.slice(2);
 var target = argv[0];
-
-var appPackage  = require(paths.appPackageJson);
-
-var outpath = paths.appBuild;
-var jsExts = [];
-
-if (target) {
-  if (!appPackage.targets) {
-    throw new Error('Targets is not defined in package json');  
-  }
-
-  var targOpts = appPackage.targets[target];
-  if (!targOpts) {
-    throw new Error('Target "' + target + '"" is not defined in package json');
-  }
-  outpath = targOpts.outpath || paths.appBuild + '_' + target;
-  jsExts = targOpts.jsExts || ['.' + target + '.js'];
-}
-
-var opts = {
-  outpath: outpath,
-  jsExts: jsExts,
-}
-
+var opts = getBuildTargetOpts(target);
 var config = makeConfig(opts);
-
+var outpath = opts.outpath;
 console.error('config: ' + JSON.stringify(config, null, 2));
 
 // Warn and crash if required files are missing

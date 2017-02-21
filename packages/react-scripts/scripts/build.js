@@ -49,6 +49,10 @@ var outpath = paths.appBuild;
 var jsExts = [];
 
 if (target) {
+  if (!appPackage.targets) {
+    throw new Error('Targets is not defined in package json');  
+  }
+
   var targOpts = appPackage.targets[target];
   if (!targOpts) {
     throw new Error('Target "' + target + '"" is not defined in package json');

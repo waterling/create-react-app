@@ -71,6 +71,8 @@
       "jsExts": [".ios.js", ".cor.js"]
     },
     "targ": {
+      "appHtml": "index.targ.html",
+      "appIndexJs": "index.targ.js"
     }
   }
 }

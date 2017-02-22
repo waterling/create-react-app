@@ -60,7 +60,7 @@ function makeConfig(opts) {
     // Errors should be considered fatal in development
     require.resolve('react-dev-utils/crashOverlay'),
     // Finally, this is your app's code:
-    paths.appIndexJs,
+    opts.appIndexJs,
     // We include the app code last so that if there is a runtime error during
     // initialization, it doesn't blow up the WebpackDevServer client, and
     // changing JS code would still trigger a refresh.
@@ -229,7 +229,7 @@ function makeConfig(opts) {
     // Generates an `index.html` file with the <script> injected.
     new HtmlWebpackPlugin({
       inject: true,
-      template: paths.appHtml,
+      template: opts.appHtml,
     }),
     // Makes some environment variables available to the JS code, for example:
     // if (process.env.NODE_ENV === 'development') { ... }. See `./env.js`.

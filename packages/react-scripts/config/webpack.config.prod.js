@@ -63,7 +63,10 @@ function makeConfig(opts) {
   // You can exclude the *.map files from the build during deployment.
   devtool: 'source-map',
   // In production, we only want to load the polyfills and the app code.
-  entry: [require.resolve('./polyfills'), paths.appIndexJs],
+  entry: [
+    require.resolve('./polyfills'),
+    opts.appIndexJs
+  ],
   output: {
     // The build folder.
     path: opts.outpath,
@@ -239,7 +242,7 @@ function makeConfig(opts) {
     // Generates an `index.html` file with the <script> injected.
     new HtmlWebpackPlugin({
       inject: true,
-      template: paths.appHtml,
+      template: opts.appHtml,
       minify: {
         removeComments: true,
         collapseWhitespace: true,

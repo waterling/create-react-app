@@ -94,6 +94,7 @@ function makeConfig(opts) {
       // https://www.smashingmagazine.com/2016/08/a-glimpse-into-the-future-with-react-native-for-web/
       'react-native': 'react-native-web',
     },
+    symlinks: false,
   },
   // @remove-on-eject-begin
   // Resolve loaders (webpack plugins for CSS, images, transpilation) from the

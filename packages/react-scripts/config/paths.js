@@ -74,16 +74,51 @@ const resolveModule = (resolveFn, filePath) => {
   return resolveFn(`${filePath}.js`);
 };
 
+const defaultTargOpts = {
+  appBuild: 'build',
+  appHtml: 'index.html',
+  appIndexJs: 'index',
+  jsExts: [],
+};
+
+const getPathOpts = appPackageJson => {
+  console.error('get path opts for: ', appPackageJson);
+  const appPackage = require(appPackageJson);
+  const target = process.env.TARGET;
+  let targOpts = defaultTargOpts;
+
+  if (target) {
+    targOpts = appPackage.targets && appPackage.targets[target];
+    if (!targOpts) {
+      throw new Error(`Target ${target} not defined in package.json`);
+    }
+    targOpts = Object.assign({}, defaultTargOpts, targOpts);
+    targOpts.appBuild = `${defaultTargOpts.appBuild}_${target}`;
+  }
+
+  return {
+    appBuild: targOpts.appBuild,
+    appHtml: path.join('public', targOpts.appHtml),
+    appIndexJs: path.join('src', targOpts.appIndexJs),
+    jsExts: targOpts.jsExts,
+  };
+};
+
+//const appPackageJson = resolveApp('package.json');
+let pathOpts = getPathOpts(resolveApp('package.json'));
+console.error('Path opts: ', pathOpts);
+
 // config after eject: we're in ./config/
 module.exports = {
   dotenv: resolveApp('.env'),
   appPath: resolveApp('.'),
-  appBuild: resolveApp('build'),
+  appBuild: resolveApp(pathOpts.appBuild),
   appPublic: resolveApp('public'),
-  appHtml: resolveApp('public/index.html'),
-  appIndexJs: resolveModule(resolveApp, 'src/index'),
+  appHtml: resolveApp(pathOpts.appHtml),
+  appIndexJs: resolveModule(resolveApp, pathOpts.appIndexJs),
   appPackageJson: resolveApp('package.json'),
   appSrc: resolveApp('src'),
+  jsExts: pathOpts.jsExts,
   appTsConfig: resolveApp('tsconfig.json'),
   yarnLockFile: resolveApp('yarn.lock'),
   testsSetup: resolveModule(resolveApp, 'src/setupTests'),
@@ -102,12 +137,13 @@ const resolveOwn = relativePath => path.resolve(__dirname, '..', relativePath);
 module.exports = {
   dotenv: resolveApp('.env'),
   appPath: resolveApp('.'),
-  appBuild: resolveApp('build'),
+  appBuild: resolveApp(pathOpts.appBuild),
   appPublic: resolveApp('public'),
-  appHtml: resolveApp('public/index.html'),
-  appIndexJs: resolveModule(resolveApp, 'src/index'),
+  appHtml: resolveApp(pathOpts.appHtml),
+  appIndexJs: resolveModule(resolveApp, pathOpts.appIndexJs),
   appPackageJson: resolveApp('package.json'),
   appSrc: resolveApp('src'),
+  jsExts: pathOpts.jsExts,
   appTsConfig: resolveApp('tsconfig.json'),
   yarnLockFile: resolveApp('yarn.lock'),
   testsSetup: resolveModule(resolveApp, 'src/setupTests'),
@@ -132,12 +168,13 @@ if (useTemplate) {
   module.exports = {
     dotenv: resolveOwn('template/.env'),
     appPath: resolveApp('.'),
-    appBuild: resolveOwn('../../build'),
+    appBuild: resolveOwn('../../' + pathOpts.appBuild),
     appPublic: resolveOwn('template/public'),
     appHtml: resolveOwn('template/public/index.html'),
     appIndexJs: resolveModule(resolveOwn, 'template/src/index'),
     appPackageJson: resolveOwn('package.json'),
     appSrc: resolveOwn('template/src'),
+    jsExts: pathOpts.jsExts,
     appTsConfig: resolveOwn('template/tsconfig.json'),
     yarnLockFile: resolveOwn('template/yarn.lock'),
     testsSetup: resolveModule(resolveOwn, 'template/src/setupTests'),

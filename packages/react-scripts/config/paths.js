@@ -47,16 +47,51 @@ function getServedPath(appPackageJson) {
   return ensureSlash(servedUrl, true);
 }
 
+const defaultTargOpts = {
+  appBuild: 'build',
+  appHtml: 'index.html',
+  appIndexJs: 'index.js',
+  jsExts: [],
+};
+
+const getPathOpts = appPackageJson => {
+  console.error('get path opts for: ', appPackageJson);
+  const appPackage = require(appPackageJson);
+  const target = process.env.TARGET;
+  let targOpts = defaultTargOpts;
+
+  if (target) {
+    targOpts = appPackage.targets && appPackage.targets[target];
+    if (!targOpts) {
+      throw new Error(`Target ${target} not defined in package.json`);
+    }
+    targOpts = Object.assign({}, defaultTargOpts, targOpts);
+    targOpts.appBuild = `${defaultTargOpts.appBuild}_${target}`;
+  }
+
+  return {
+    appBuild: targOpts.appBuild,
+    appHtml: path.join('public', targOpts.appHtml),
+    appIndexJs: path.join('src', targOpts.appIndexJs),
+    jsExts: targOpts.jsExts,
+  };
+};
+
+//const appPackageJson = resolveApp('package.json');
+let pathOpts = getPathOpts(resolveApp('package.json'));
+console.error('Path opts: ', pathOpts);
+
 // config after eject: we're in ./config/
 module.exports = {
   dotenv: resolveApp('.env'),
   appPath: resolveApp('.'),
-  appBuild: resolveApp('build'),
+  appBuild: resolveApp(pathOpts.appBuild),
   appPublic: resolveApp('public'),
-  appHtml: resolveApp('public/index.html'),
-  appIndexJs: resolveApp('src/index.js'),
+  appHtml: resolveApp(pathOpts.appHtml),
+  appIndexJs: resolveApp(pathOpts.appIndexJs),
   appPackageJson: resolveApp('package.json'),
   appSrc: resolveApp('src'),
+  jsExts: pathOpts.jsExts,
   testsSetup: resolveApp('src/setupTests.js'),
   appNodeModules: resolveApp('node_modules'),
   publicUrl: getPublicUrl(resolveApp('package.json')),
@@ -72,12 +107,13 @@ const resolveOwn = relativePath => path.resolve(__dirname, '..', relativePath);
 module.exports = {
   dotenv: resolveApp('.env'),
   appPath: resolveApp('.'),
-  appBuild: resolveApp('build'),
+  appBuild: resolveApp(pathOpts.appBuild),
   appPublic: resolveApp('public'),
-  appHtml: resolveApp('public/index.html'),
-  appIndexJs: resolveApp('src/index.js'),
+  appHtml: resolveApp(pathOpts.appHtml),
+  appIndexJs: resolveApp(pathOpts.appIndexJs),
   appPackageJson: resolveApp('package.json'),
   appSrc: resolveApp('src'),
+  jsExts: pathOpts.jsExts,
   testsSetup: resolveApp('src/setupTests.js'),
   appNodeModules: resolveApp('node_modules'),
   publicUrl: getPublicUrl(resolveApp('package.json')),
@@ -97,12 +133,13 @@ if (useTemplate) {
   module.exports = {
     dotenv: resolveOwn('template/.env'),
     appPath: resolveApp('.'),
-    appBuild: resolveOwn('../../build'),
+    appBuild: resolveOwn('../../' + pathOpts.appBuild),
     appPublic: resolveOwn('template/public'),
-    appHtml: resolveOwn('template/public/index.html'),
-    appIndexJs: resolveOwn('template/src/index.js'),
+    appHtml: resolveOwn('template/' + pathOpts.appHtml),
+    appIndexJs: resolveOwn('template/' + pathOpts.appIndexJs),
     appPackageJson: resolveOwn('package.json'),
     appSrc: resolveOwn('template/src'),
+    jsExts: pathOpts.jsExts,
     testsSetup: resolveOwn('template/src/setupTests.js'),
     appNodeModules: resolveOwn('node_modules'),
     publicUrl: getPublicUrl(resolveOwn('package.json')),

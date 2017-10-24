@@ -63,5 +63,17 @@
   },
   "optionalDependencies": {
     "fsevents": "1.1.2"
+  },
+  "targets": {
+    "ios": {
+      "jsExts": [
+        ".ios.js",
+        ".cor.js"
+      ]
+    },
+    "targ": {
+      "appHtml": "index.targ.html",
+      "appIndexJs": "index.targ.js"
+    }
   }
 }

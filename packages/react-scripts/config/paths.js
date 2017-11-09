@@ -46,6 +46,9 @@ function getServedPath(appPackageJson) {
   return ensureSlash(servedUrl, true);
 }
 
+const appPackageJson = require(resolveApp('package.json'));
+const srcPaths = appPackageJson.srcPaths || [];
+
 // config after eject: we're in ./config/
 module.exports = {
   dotenv: resolveApp('.env'),
@@ -55,6 +58,7 @@ module.exports = {
   appIndexJs: resolveApp('src/index.js'),
   appPackageJson: resolveApp('package.json'),
   appSrc: resolveApp('src'),
+  srcPaths: srcPaths.map(resolveApp),
   yarnLockFile: resolveApp('yarn.lock'),
   testsSetup: resolveApp('src/setupTests.js'),
   appNodeModules: resolveApp('node_modules'),
@@ -75,6 +79,7 @@ module.exports = {
   appIndexJs: resolveApp('src/index.js'),
   appPackageJson: resolveApp('package.json'),
   appSrc: resolveApp('src'),
+  srcPaths: srcPaths.map(resolveApp),
   yarnLockFile: resolveApp('yarn.lock'),
   testsSetup: resolveApp('src/setupTests.js'),
   appNodeModules: resolveApp('node_modules'),
@@ -96,6 +101,8 @@ if (
   !reactScriptsLinked &&
   __dirname.indexOf(path.join('packages', 'react-scripts', 'config')) !== -1
 ) {
+  const appPackageJson = require(resolveOwn('package.json'));
+  const srcPaths = appPackageJson.srcPaths || [];
   module.exports = {
     dotenv: resolveOwn('template/.env'),
     appPath: resolveApp('.'),
@@ -105,6 +112,7 @@ if (
     appIndexJs: resolveOwn('template/src/index.js'),
     appPackageJson: resolveOwn('package.json'),
     appSrc: resolveOwn('template/src'),
+    srcPaths: srcPaths.map(resolveOwn),
     yarnLockFile: resolveOwn('template/yarn.lock'),
     testsSetup: resolveOwn('template/src/setupTests.js'),
     appNodeModules: resolveOwn('node_modules'),

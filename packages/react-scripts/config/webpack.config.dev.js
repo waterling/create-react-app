@@ -83,7 +83,7 @@ module.exports = {
     modules: ['node_modules', paths.appNodeModules].concat(
       // It is guaranteed to exist because we tweak it in `env.js`
       process.env.NODE_PATH.split(path.delimiter).filter(Boolean)
-    ),
+    ).concat(paths.srcPaths),
     // These are the reasonable defaults supported by the Node ecosystem.
     // We also include JSX as a common component filename extension to support
     // some tools, although we do not recommend using it, see:
@@ -111,7 +111,9 @@ module.exports = {
       // To fix this, we prevent you from importing files out of src/ -- if you'd like to,
       // please link the files into your node_modules/ and let module-resolution kick in.
       // Make sure your source files are compiled, as they will not be processed in any way.
-      new ModuleScopePlugin(paths.appSrc, [paths.appPackageJson]),
+
+      // TODO: update ModuleScopePlugin to enforce rules with appSrc + srcPaths
+      // new ModuleScopePlugin(paths.appSrc, [paths.appPackageJson]),
     ],
   },
   module: {
@@ -142,7 +144,7 @@ module.exports = {
             loader: require.resolve('eslint-loader'),
           },
         ],
-        include: paths.appSrc,
+        include: [paths.appSrc].concat(paths.srcPaths),
       },
       {
         // "oneOf" will traverse all following loaders until one will
@@ -163,7 +165,7 @@ module.exports = {
           // Process JS with Babel.
           {
             test: /\.(js|jsx|mjs)$/,
-            include: paths.appSrc,
+            include: [paths.appSrc].concat(paths.srcPaths),
             loader: require.resolve('babel-loader'),
             options: {
               // @remove-on-eject-begin

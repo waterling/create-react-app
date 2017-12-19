@@ -1,3 +1,14 @@
+---
+---
+
+# Create React App -- With Source Sharing
+This is a fork of [create-react-app](https://github.com/facebookincubator/create-react-app) which adds support for sharing source, e.g. to support monorepos.<br/>
+See [example monorepo which uses this fork](https://github.com/bradfordlemley/cra-share) for more information.<br/>
+Hopefully create-react-app itself will add support for sharing source, at which point, this fork will be deprecated.<br/>
+
+---
+---
+<br/><br/><br/><br/>
 # Create React App [![Build Status](https://travis-ci.org/facebookincubator/create-react-app.svg?branch=master)](https://travis-ci.org/facebookincubator/create-react-app)
 
 Create React apps with no build configuration.

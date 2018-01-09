@@ -85,17 +85,8 @@ module.exports = {
   ownNodeModules: resolveOwn('node_modules'), // This is empty on npm 3
 };
 
-const ownPackageJson = require('../package.json');
-const reactScriptsPath = resolveApp(`node_modules/${ownPackageJson.name}`);
-const reactScriptsLinked =
-  fs.existsSync(reactScriptsPath) &&
-  fs.lstatSync(reactScriptsPath).isSymbolicLink();
-
-// config before publish: we're in ./packages/react-scripts/config/
-if (
-  !reactScriptsLinked &&
-  __dirname.indexOf(path.join('packages', 'react-scripts', 'config')) !== -1
-) {
+// use template if running from create-react-app top-level
+if (fs.existsSync(path.join(appDirectory, 'packages', 'react-scripts', 'config'))) {
   module.exports = {
     dotenv: resolveOwn('template/.env'),
     appPath: resolveApp('.'),

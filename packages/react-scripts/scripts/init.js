@@ -28,7 +28,7 @@ module.exports = function(
 ) {
   const ownPackageName = require(path.join(__dirname, '..', 'package.json'))
     .name;
-  const ownPath = path.join(appPath, 'node_modules', ownPackageName);
+  const ownPath = path.resolve(__dirname, '..');
   const appPackage = require(path.join(appPath, 'package.json'));
   const useYarn = fs.existsSync(path.join(appPath, 'yarn.lock'));
 

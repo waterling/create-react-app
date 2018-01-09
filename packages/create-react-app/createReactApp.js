@@ -48,6 +48,7 @@ const unpack = require('tar-pack').unpack;
 const url = require('url');
 const hyperquest = require('hyperquest');
 const envinfo = require('envinfo');
+const findPkg = require('find-pkg');
 
 const packageJson = require('./package.json');
 
@@ -313,9 +314,7 @@ function run(
       setCaretRangeForRuntimeDeps(packageName);
 
       const scriptsPath = path.resolve(
-        process.cwd(),
-        'node_modules',
-        packageName,
+        path.dirname(resolvePackagePath(packageName)),
         'scripts',
         'init.js'
       );
@@ -504,13 +503,50 @@ function checkNpmVersion() {
   };
 }
 
-function checkNodeVersion(packageName) {
+const getYarnWorkspaceRoot = (appDir) => {
+  const rootPkgJsonPath = findPkg.sync(path.resolve(appDir, '..'));
+  if (rootPkgJsonPath) {
+    const rootPkgJson = require(rootPkgJsonPath);
+    if (rootPkgJson.workspaces) {
+      return path.dirname(rootPkgJsonPath);
+    }
+  }
+  return null;
+}
+
+const resolvePackagePath = (packageName) => {
+  // For yarn workspace, react-scripts might be in top-level node_modules
+  // and not symlink'd from app's node_modules
+  // See: https://github.com/yarnpkg/yarn/issues/3882
+  // See: https://github.com/yarnpkg/yarn/issues/4219
+  // Note, Node 8.9.0+ supports this:
+  //   require.resolve(packageName + '/package.json', {paths: [process.cwd()]});)
   const packageJsonPath = path.resolve(
     process.cwd(),
     'node_modules',
     packageName,
     'package.json'
   );
+  if (fs.existsSync(packageJsonPath)) {
+    return packageJsonPath;
+  }
+
+  const yarnWkspcRoot = getYarnWorkspaceRoot(process.cwd());
+  if (yarnWkspcRoot) {
+    const wkspcPkgJsonPath = path.join(
+      yarnWkspcRoot,
+      'node_modules',
+      packageName,
+      'package.json');
+    if (fs.existsSync(wkspcPkgJsonPath)) {
+      return wkspcPkgJsonPath;
+    }
+  }
+  return null;
+}
+
+function checkNodeVersion(packageName) {
+  const packageJsonPath = resolvePackagePath(packageName);
   const packageJson = require(packageJsonPath);
   if (!packageJson.engines || !packageJson.engines.node) {
     return;

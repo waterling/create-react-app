@@ -108,6 +108,7 @@ inquirer
     const jestConfig = createJestConfig(
       filePath => path.posix.join('<rootDir>', filePath),
       null,
+      paths.srcPaths,
       true
     );
 

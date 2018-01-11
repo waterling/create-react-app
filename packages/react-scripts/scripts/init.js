@@ -18,7 +18,6 @@ const fs = require('fs-extra');
 const path = require('path');
 const chalk = require('chalk');
 const spawn = require('react-dev-utils/crossSpawn');
-const resolveFrom = require('resolve-from');
 
 module.exports = function(
   appPath,
@@ -29,10 +28,7 @@ module.exports = function(
 ) {
   const ownPackageName = require(path.join(__dirname, '..', 'package.json'))
     .name;
-  const ownPath = path.join(
-    resolveFrom(appPath, path.join(ownPackageName, 'package.json')),
-    '..'
-  );
+  const ownPath = path.join(appPath, 'node_modules', ownPackageName);
   const appPackage = require(path.join(appPath, 'package.json'));
   const useYarn = fs.existsSync(path.join(appPath, 'yarn.lock'));
 

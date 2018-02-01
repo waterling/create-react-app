@@ -75,6 +75,7 @@ You can find the most recent version of this guide [here](https://github.com/fac
 - [Developing Components in Isolation](#developing-components-in-isolation)
   - [Getting Started with Storybook](#getting-started-with-storybook)
   - [Getting Started with Styleguidist](#getting-started-with-styleguidist)
+- [Sharing Components in a Monorepo](#sharing-components-in-a-monorepo)
 - [Publishing Components to npm](#publishing-components-to-npm)
 - [Making a Progressive Web App](#making-a-progressive-web-app)
   - [Why Opt-in?](#why-opt-in)
@@ -1846,6 +1847,74 @@ Learn more about React Styleguidist:
 - [GitHub Repo](https://github.com/styleguidist/react-styleguidist)
 - [Documentation](https://react-styleguidist.js.org/docs/getting-started.html)
 
+## Sharing Components in a Monorepo
+
+A typical monorepo folder structure looks like this:
+
+```
+monorepo/
+  app1/
+  app2/
+  comp1/
+  comp2/
+```
+
+The monorepo allows components to be separated from the app, providing:
+
+- a level of encapsulation for components
+- sharing of components
+
+### How to Set Up a Monorepo
+
+Below expands on the monorepo structure above, adding the package.json files required to configure the monorepo for [yarn workspaces](https://yarnpkg.com/en/docs/workspaces).
+
+```
+monorepo/
+  package.json:
+    "workspaces": ["*"],
+    "private": true
+  app1/
+    package.json:
+      "dependencies": ["@myorg/comp1": ">=0.0.0", "react": "^16.2.0"],
+      "devDependencies": ["react-scripts": "2.0.0"]
+    src/
+      app.js: import comp1 from '@myorg/comp1';
+  app2/
+    package.json:
+      "dependencies": ["@myorg/comp1": ">=0.0.0", "react": "^16.2.0"],
+      "devDependencies": ["react-scripts": "2.0.0"]
+    src/
+      app.js: import comp1 from '@myorg/comp1';
+  comp1/
+    package.json:
+      "name": "@myorg/comp1",
+      "version": "0.1.0"
+    index.js
+  comp2/
+    package.json:
+      "name": "@myorg/comp2",
+      "version": "0.1.0",
+      "dependencies": ["@myorg/comp1": ">=0.0.0"],
+      "devDependencies": ["react": "^16.2.0"]
+    index.js: import comp1 from '@myorg/comp1'
+```
+
+- Monorepo tools work on a package level, the same level as an npm package.
+- The "workspaces" in the top-level package.json is an array of glob patterns specifying where shared packages are located in the monorepo.
+- The scoping prefixes, e.g. @myorg/, are not required, but are recommended, allowing you to differentiate your packages from others of the same name. See [scoped packages ](https://docs.npmjs.com/misc/scope) for more info.
+- Using a package in the monorepo is accomplished in the same manner as a published npm package, by specifying the shared package as dependency.
+- In order to pick up the monorepo version of a package, the specified dependency version must semantically match the package version in the monorepo. See [semver](https://docs.npmjs.com/misc/semver) for info on semantic version matching.
+
+### CRA Apps in a Monorepo
+
+- CRA apps in a monorepo are just a standard CRA app, they use the same react-script scripts.
+- However, when you use react-scripts for an app in a monorepo, all packages in the monorepo are treated as app sources -- they are watched, linted, transpiled, and tested in the same way as if they were part of the app itself.
+- Without this functionality, each package would need its own build/test/etc functionality and it would be challenging to link all of these together.
+
+### Lerna and Publishing
+
+[Lerna](https://github.com/lerna/lerna) is a popular tool for managing monorepos. Lerna can be configured to use yarn workspaces, so it will work with the monorepo structure above. It's important to note that while lerna helps publish various packages in a monorepo, react-scripts does nothing to help publish a component to npm. A component which uses JSX or ES6+ features would need to be built by another tool before it can be published to npm. See [publishing components to npm](#publishing-components-to-npm) for more info.
+
 ## Publishing Components to npm
 
 Create React App doesn't provide any built-in functionality to publish a component to npm. If you're ready to extract a component from your project so other people can use it, we recommend moving it to a separate directory outside of your project and then using a tool like [nwb](https://github.com/insin/nwb#react-components-and-libraries) to prepare it for publishing.
@@ -2447,19 +2516,19 @@ Note that in order to support routers that use HTML5 `pushState` API, you may wa
 
 You can adjust various development and production settings by setting environment variables in your shell or with [.env](#adding-development-environment-variables-in-env).
 
-| Variable             |      Development       |     Production     | Usage                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+|       Variable       |      Development       |     Production     | Usage                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
 | :------------------: | :--------------------: | :----------------: | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| BROWSER              |   :white_check_mark:   |        :x:         | By default, Create React App will open the default system browser, favoring Chrome on macOS. Specify a [browser](https://github.com/sindresorhus/opn#app) to override this behavior, or set it to `none` to disable it completely. If you need to customize the way the browser is launched, you can specify a node script instead. Any arguments passed to `npm start` will also be passed to this script, and the url where your app is served will be the last argument. Your script's file name must have the `.js` extension.                                                                                                                                       |
-| HOST                 |   :white_check_mark:   |        :x:         | By default, the development web server binds to `localhost`. You may use this variable to specify a different host.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
-| PORT                 |   :white_check_mark:   |        :x:         | By default, the development web server will attempt to listen on port 3000 or prompt you to attempt the next available port. You may use this variable to specify a different port.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
-| HTTPS                |   :white_check_mark:   |        :x:         | When set to `true`, Create React App will run the development server in `https` mode.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
-| PUBLIC_URL           |          :x:           | :white_check_mark: | Create React App assumes your application is hosted at the serving web server's root or a subpath as specified in [`package.json` (`homepage`)](#building-for-relative-paths). Normally, Create React App ignores the hostname. You may use this variable to force assets to be referenced verbatim to the url you provide (hostname included). This may be particularly useful when using a CDN to host your application.                                                                                                                                                                                                                                               |
-| CI                   | :large_orange_diamond: | :white_check_mark: | When set to `true`, Create React App treats warnings as failures in the build. It also makes the test runner non-watching. Most CIs set this flag by default.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
-| REACT_EDITOR         |   :white_check_mark:   |        :x:         | When an app crashes in development, you will see an error overlay with clickable stack trace. When you click on it, Create React App will try to determine the editor you are using based on currently running processes, and open the relevant source file. You can [send a pull request to detect your editor of choice](https://github.com/facebook/create-react-app/issues/2636). Setting this environment variable overrides the automatic detection. If you do it, make sure your systems [PATH](<https://en.wikipedia.org/wiki/PATH_(variable)>) environment variable points to your editor’s bin folder. You can also set it to `none` to disable it completely. |
+|       BROWSER        |   :white_check_mark:   |        :x:         | By default, Create React App will open the default system browser, favoring Chrome on macOS. Specify a [browser](https://github.com/sindresorhus/opn#app) to override this behavior, or set it to `none` to disable it completely. If you need to customize the way the browser is launched, you can specify a node script instead. Any arguments passed to `npm start` will also be passed to this script, and the url where your app is served will be the last argument. Your script's file name must have the `.js` extension.                                                                                                                                       |
+|         HOST         |   :white_check_mark:   |        :x:         | By default, the development web server binds to `localhost`. You may use this variable to specify a different host.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
+|         PORT         |   :white_check_mark:   |        :x:         | By default, the development web server will attempt to listen on port 3000 or prompt you to attempt the next available port. You may use this variable to specify a different port.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
+|        HTTPS         |   :white_check_mark:   |        :x:         | When set to `true`, Create React App will run the development server in `https` mode.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+|      PUBLIC_URL      |          :x:           | :white_check_mark: | Create React App assumes your application is hosted at the serving web server's root or a subpath as specified in [`package.json` (`homepage`)](#building-for-relative-paths). Normally, Create React App ignores the hostname. You may use this variable to force assets to be referenced verbatim to the url you provide (hostname included). This may be particularly useful when using a CDN to host your application.                                                                                                                                                                                                                                               |
+|          CI          | :large_orange_diamond: | :white_check_mark: | When set to `true`, Create React App treats warnings as failures in the build. It also makes the test runner non-watching. Most CIs set this flag by default.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
+|     REACT_EDITOR     |   :white_check_mark:   |        :x:         | When an app crashes in development, you will see an error overlay with clickable stack trace. When you click on it, Create React App will try to determine the editor you are using based on currently running processes, and open the relevant source file. You can [send a pull request to detect your editor of choice](https://github.com/facebook/create-react-app/issues/2636). Setting this environment variable overrides the automatic detection. If you do it, make sure your systems [PATH](<https://en.wikipedia.org/wiki/PATH_(variable)>) environment variable points to your editor’s bin folder. You can also set it to `none` to disable it completely. |
 | CHOKIDAR_USEPOLLING  |   :white_check_mark:   |        :x:         | When set to `true`, the watcher runs in polling mode, as necessary inside a VM. Use this option if `npm start` isn't detecting changes.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
-| GENERATE_SOURCEMAP   |          :x:           | :white_check_mark: | When set to `false`, source maps are not generated for a production build. This solves OOM issues on some smaller machines.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
-| NODE_PATH            |   :white_check_mark:   | :white_check_mark: | Same as [`NODE_PATH` in Node.js](https://nodejs.org/api/modules.html#modules_loading_from_the_global_folders), but only relative folders are allowed. Can be handy for emulating a monorepo setup by setting `NODE_PATH=src`.                                                                                                                                                                                                                                                                                                                                                                                                                                            |
-| INLINE_RUNTIME_CHUNK |          :x:           | :white_check_mark: | By default, Create React App will embed the runtime script into `index.html` during the production build. When set to `false`, the script will not be embedded and will be imported as usual. This is normally required when dealing with CSP.                                                                                                                                                                                                                                                                                                                                                                                                                       |
+|  GENERATE_SOURCEMAP  |          :x:           | :white_check_mark: | When set to `false`, source maps are not generated for a production build. This solves OOM issues on some smaller machines.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
+|      NODE_PATH       |   :white_check_mark:   | :white_check_mark: | Same as [`NODE_PATH` in Node.js](https://nodejs.org/api/modules.html#modules_loading_from_the_global_folders), but only relative folders are allowed. Can be handy for emulating a monorepo setup by setting `NODE_PATH=src`.                                                                                                                                                                                                                                                                                                                                                                                                                                            |
+| INLINE_RUNTIME_CHUNK |          :x:           | :white_check_mark: | By default, Create React App will embed the runtime script into `index.html` during the production build. When set to `false`, the script will not be embedded and will be imported as usual. This is normally required when dealing with CSP.                                                                                                                                                                                                                                                                                                                                                                                                                           |
 
 ## Troubleshooting
 

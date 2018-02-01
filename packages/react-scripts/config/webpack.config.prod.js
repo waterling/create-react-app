@@ -24,9 +24,9 @@ const ModuleScopePlugin = require('@bradfordlemley/react-dev-utils/ModuleScopePl
 const getCSSModuleLocalIdent = require('@bradfordlemley/react-dev-utils/getCSSModuleLocalIdent');
 const paths = require('./paths');
 const getClientEnvironment = require('./env');
-const ModuleNotFoundPlugin = require('react-dev-utils/ModuleNotFoundPlugin');
+const ModuleNotFoundPlugin = require('@bradfordlemley/react-dev-utils/ModuleNotFoundPlugin');
 // @remove-on-eject-begin
-const getCacheIdentifier = require('react-dev-utils/getCacheIdentifier');
+const getCacheIdentifier = require('@bradfordlemley/react-dev-utils/getCacheIdentifier');
 // @remove-on-eject-end
 
 // Webpack uses `publicPath` to determine where the app is being served from.
@@ -221,7 +221,14 @@ module.exports = {
     // https://github.com/facebook/create-react-app/issues/290
     // `web` extension prefixes have been added for better support
     // for React Native Web.
-    extensions: paths.jsExts.concat(['.mjs', '.web.js', '.js', '.json', '.web.jsx', '.jsx']),
+    extensions: paths.jsExts.concat([
+      '.mjs',
+      '.web.js',
+      '.js',
+      '.json',
+      '.web.jsx',
+      '.jsx',
+    ]),
     alias: {
       // Support React Native Web
       // https://www.smashingmagazine.com/2016/08/a-glimpse-into-the-future-with-react-native-for-web/
@@ -261,13 +268,17 @@ module.exports = {
         use: [
           {
             options: {
-              formatter: require.resolve('@bradfordlemley/react-dev-utils/eslintFormatter'),
+              formatter: require.resolve(
+                '@bradfordlemley/react-dev-utils/eslintFormatter'
+              ),
               eslintPath: require.resolve('eslint'),
               // @remove-on-eject-begin
               // TODO: consider separate config for production,
               // e.g. to enable no-console and no-debugger only in production.
               baseConfig: {
-                extends: [require.resolve('@bradfordlemley/eslint-config-react-app')],
+                extends: [
+                  require.resolve('@bradfordlemley/eslint-config-react-app'),
+                ],
                 settings: { react: { version: '999.999.999' } },
               },
               ignore: false,
@@ -277,7 +288,8 @@ module.exports = {
             loader: require.resolve('eslint-loader'),
           },
         ],
-        include: paths.appSrc,
+        include: paths.srcPaths,
+        exclude: [/[/\\\\]node_modules[/\\\\]/],
       },
       {
         // "oneOf" will traverse all following loaders until one will
@@ -298,8 +310,8 @@ module.exports = {
           // The preset includes JSX, Flow, and some ESnext features.
           {
             test: /\.(js|mjs|jsx)$/,
-            include: paths.appSrc,
-
+            include: paths.srcPaths,
+            exclude: [/[/\\\\]node_modules[/\\\\]/],
             loader: require.resolve('babel-loader'),
             options: {
               customize: require.resolve(
@@ -308,7 +320,9 @@ module.exports = {
               // @remove-on-eject-begin
               babelrc: false,
               configFile: false,
-              presets: [require.resolve('@bradfordlemley/babel-preset-react-app')],
+              presets: [
+                require.resolve('@bradfordlemley/babel-preset-react-app'),
+              ],
               // Make sure we have a unique cache identifier, erring on the
               // side of caution.
               // We remove this when the user ejects because the default
@@ -323,7 +337,9 @@ module.exports = {
               // @remove-on-eject-end
               plugins: [
                 [
-                  require.resolve('@bradfordlemley/babel-plugin-named-asset-import'),
+                  require.resolve(
+                    '@bradfordlemley/babel-plugin-named-asset-import'
+                  ),
                   {
                     loaderMap: {
                       svg: {
@@ -351,7 +367,9 @@ module.exports = {
               compact: false,
               presets: [
                 [
-                  require.resolve('@bradfordlemley/babel-preset-react-app/dependencies'),
+                  require.resolve(
+                    '@bradfordlemley/babel-preset-react-app/dependencies'
+                  ),
                   { helpers: true },
                 ],
               ],
@@ -479,7 +497,8 @@ module.exports = {
     }),
     // Inlines the webpack runtime script. This script is too small to warrant
     // a network request.
-    shouldInlineRuntimeChunk && new InlineChunkHtmlPlugin(HtmlWebpackPlugin, [/runtime~.+[.]js/]),
+    shouldInlineRuntimeChunk &&
+      new InlineChunkHtmlPlugin(HtmlWebpackPlugin, [/runtime~.+[.]js/]),
     // Makes some environment variables available in index.html.
     // The public URL is available as %PUBLIC_URL% in index.html, e.g.:
     // <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico">

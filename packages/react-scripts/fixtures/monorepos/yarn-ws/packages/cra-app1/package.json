@@ -9,7 +9,7 @@
     "react-dom": "^16.2.0"
   },
   "devDependencies": {
-    "react-scripts": "latest"
+    "@bradfordlemley/react-scripts": "latest"
   },
   "scripts": {
     "start": "react-scripts start",

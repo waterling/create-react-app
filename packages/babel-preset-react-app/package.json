@@ -1,11 +1,11 @@
 {
-  "name": "babel-preset-react-app",
+  "name": "@bradfordlemley/babel-preset-react-app",
   "version": "5.0.3",
   "description": "Babel preset used by Create React App",
-  "repository": "facebook/create-react-app",
+  "repository": "github:bradfordlemley/create-react-app",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/facebook/create-react-app/issues"
+    "url": "https://github.com/bradfordlemley/create-react-app/issues"
   },
   "files": [
     "create.js",

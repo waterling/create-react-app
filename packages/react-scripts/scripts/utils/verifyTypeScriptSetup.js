@@ -14,8 +14,8 @@ const resolve = require('resolve');
 const path = require('path');
 const paths = require('../../config/paths');
 const os = require('os');
-const immer = require('react-dev-utils/immer').produce;
-const globby = require('react-dev-utils/globby').sync;
+const immer = require('@bradfordlemley/react-dev-utils/immer').produce;
+const globby = require('@bradfordlemley/react-dev-utils/globby').sync;
 
 function writeJson(fileName, object) {
   fs.writeFileSync(fileName, JSON.stringify(object, null, 2) + os.EOL);

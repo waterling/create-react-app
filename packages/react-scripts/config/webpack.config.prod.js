@@ -14,23 +14,23 @@ const webpack = require('webpack');
 const resolve = require('resolve');
 const PnpWebpackPlugin = require('pnp-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const InlineChunkHtmlPlugin = require('react-dev-utils/InlineChunkHtmlPlugin');
+const InlineChunkHtmlPlugin = require('@bradfordlemley/react-dev-utils/InlineChunkHtmlPlugin');
 const TerserPlugin = require('terser-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const safePostCssParser = require('postcss-safe-parser');
 const ManifestPlugin = require('webpack-manifest-plugin');
-const InterpolateHtmlPlugin = require('react-dev-utils/InterpolateHtmlPlugin');
+const InterpolateHtmlPlugin = require('@bradfordlemley/react-dev-utils/InterpolateHtmlPlugin');
 const WorkboxWebpackPlugin = require('workbox-webpack-plugin');
-const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin');
-const getCSSModuleLocalIdent = require('react-dev-utils/getCSSModuleLocalIdent');
+const ModuleScopePlugin = require('@bradfordlemley/react-dev-utils/ModuleScopePlugin');
+const getCSSModuleLocalIdent = require('@bradfordlemley/react-dev-utils/getCSSModuleLocalIdent');
 const paths = require('./paths');
 const getClientEnvironment = require('./env');
-const ModuleNotFoundPlugin = require('react-dev-utils/ModuleNotFoundPlugin');
+const ModuleNotFoundPlugin = require('@bradfordlemley/react-dev-utils/ModuleNotFoundPlugin');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin-alt');
-const typescriptFormatter = require('react-dev-utils/typescriptFormatter');
+const typescriptFormatter = require('@bradfordlemley/react-dev-utils/typescriptFormatter');
 // @remove-on-eject-begin
-const getCacheIdentifier = require('react-dev-utils/getCacheIdentifier');
+const getCacheIdentifier = require('@bradfordlemley/react-dev-utils/getCacheIdentifier');
 // @remove-on-eject-end
 
 // Webpack uses `publicPath` to determine where the app is being served from.
@@ -270,12 +270,16 @@ module.exports = {
         use: [
           {
             options: {
-              formatter: require.resolve('react-dev-utils/eslintFormatter'),
+              formatter: require.resolve(
+                '@bradfordlemley/react-dev-utils/eslintFormatter'
+              ),
               eslintPath: require.resolve('eslint'),
               // TODO: consider separate config for production,
               // e.g. to enable no-console and no-debugger only in production.
               baseConfig: {
-                extends: [require.resolve('eslint-config-react-app')],
+                extends: [
+                  require.resolve('@bradfordlemley/eslint-config-react-app'),
+                ],
                 settings: { react: { version: '999.999.999' } },
               },
               // @remove-on-eject-begin
@@ -313,12 +317,14 @@ module.exports = {
             loader: require.resolve('babel-loader'),
             options: {
               customize: require.resolve(
-                'babel-preset-react-app/webpack-overrides'
+                '@bradfordlemley/babel-preset-react-app/webpack-overrides'
               ),
               // @remove-on-eject-begin
               babelrc: false,
               configFile: false,
-              presets: [require.resolve('babel-preset-react-app')],
+              presets: [
+                require.resolve('@bradfordlemley/babel-preset-react-app'),
+              ],
               // Make sure we have a unique cache identifier, erring on the
               // side of caution.
               // We remove this when the user ejects because the default
@@ -333,7 +339,9 @@ module.exports = {
               // @remove-on-eject-end
               plugins: [
                 [
-                  require.resolve('babel-plugin-named-asset-import'),
+                  require.resolve(
+                    '@bradfordlemley/babel-plugin-named-asset-import'
+                  ),
                   {
                     loaderMap: {
                       svg: {
@@ -361,7 +369,9 @@ module.exports = {
               compact: false,
               presets: [
                 [
-                  require.resolve('babel-preset-react-app/dependencies'),
+                  require.resolve(
+                    '@bradfordlemley/babel-preset-react-app/dependencies'
+                  ),
                   { helpers: true },
                 ],
               ],

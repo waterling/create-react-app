@@ -1,11 +1,11 @@
 {
-  "name": "eslint-config-react-app",
+  "name": "@bradfordlemley/eslint-config-react-app",
   "version": "2.1.0",
   "description": "ESLint configuration used by Create React App",
-  "repository": "facebook/create-react-app",
+  "repository": "github:bradfordlemley/create-react-app",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/facebook/create-react-app/issues"
+    "url": "https://github.com/bradfordlemley/create-react-app/issues"
   },
   "files": [
     "index.js"
@@ -19,6 +19,6 @@
     "eslint-plugin-react": "^7.8.2"
   },
   "dependencies": {
-    "confusing-browser-globals": "^1.0.0"
+    "@bradfordlemley/confusing-browser-globals": "^1.0.0"
   }
 }

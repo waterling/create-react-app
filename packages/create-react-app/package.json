@@ -1,17 +1,17 @@
 {
-  "name": "create-react-app",
+  "name": "@bradfordlemley/create-react-app",
   "version": "2.0.3",
   "keywords": [
     "react"
   ],
   "description": "Create React apps with no build configuration.",
-  "repository": "facebook/create-react-app",
+  "repository": "github:bradfordlemley/create-react-app",
   "license": "MIT",
   "engines": {
     "node": ">=4"
   },
   "bugs": {
-    "url": "https://github.com/facebook/create-react-app/issues"
+    "url": "https://github.com/bradfordlemley/create-react-app/issues"
   },
   "files": [
     "index.js",

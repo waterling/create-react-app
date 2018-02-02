@@ -13,10 +13,10 @@ const webpack = require('webpack');
 const PnpWebpackPlugin = require('pnp-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
-const InterpolateHtmlPlugin = require('react-dev-utils/InterpolateHtmlPlugin');
-const WatchMissingNodeModulesPlugin = require('react-dev-utils/WatchMissingNodeModulesPlugin');
-const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin');
-const getCSSModuleLocalIdent = require('react-dev-utils/getCSSModuleLocalIdent');
+const InterpolateHtmlPlugin = require('@bradfordlemley/react-dev-utils/InterpolateHtmlPlugin');
+const WatchMissingNodeModulesPlugin = require('@bradfordlemley/react-dev-utils/WatchMissingNodeModulesPlugin');
+const ModuleScopePlugin = require('@bradfordlemley/react-dev-utils/ModuleScopePlugin');
+const getCSSModuleLocalIdent = require('@bradfordlemley/react-dev-utils/getCSSModuleLocalIdent');
 const getClientEnvironment = require('./env');
 const paths = require('./paths');
 const ManifestPlugin = require('webpack-manifest-plugin');
@@ -97,7 +97,7 @@ module.exports = {
     // the line below with these two lines if you prefer the stock client:
     // require.resolve('webpack-dev-server/client') + '?/',
     // require.resolve('webpack/hot/dev-server'),
-    require.resolve('react-dev-utils/webpackHotDevClient'),
+    require.resolve('@bradfordlemley/react-dev-utils/webpackHotDevClient'),
     // Finally, this is your app's code:
     paths.appIndexJs,
     // We include the app code last so that if there is a runtime error during
@@ -190,7 +190,7 @@ module.exports = {
               eslintPath: require.resolve('eslint'),
               // @remove-on-eject-begin
               baseConfig: {
-                extends: [require.resolve('eslint-config-react-app')],
+                extends: [require.resolve('@bradfordlemley/eslint-config-react-app')],
                 settings: { react: { version: '999.999.999' } },
               },
               ignore: false,
@@ -226,12 +226,12 @@ module.exports = {
             loader: require.resolve('babel-loader'),
             options: {
               customize: require.resolve(
-                'babel-preset-react-app/webpack-overrides'
+                '@bradfordlemley/babel-preset-react-app/webpack-overrides'
               ),
               // @remove-on-eject-begin
               babelrc: false,
               configFile: false,
-              presets: [require.resolve('babel-preset-react-app')],
+              presets: [require.resolve('@bradfordlemley/babel-preset-react-app')],
               // Make sure we have a unique cache identifier, erring on the
               // side of caution.
               // We remove this when the user ejects because the default
@@ -276,7 +276,7 @@ module.exports = {
               compact: false,
               presets: [
                 [
-                  require.resolve('babel-preset-react-app/dependencies'),
+                  require.resolve('@bradfordlemley/babel-preset-react-app/dependencies'),
                   { helpers: true },
                 ],
               ],

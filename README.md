@@ -1,3 +1,7 @@
+# THIS IS A FORK
+
+Add some extra SAUCE-someness to your CRA-someness.
+
 # Create React App [![Build Status](https://travis-ci.org/facebookincubator/create-react-app.svg?branch=master)](https://travis-ci.org/facebookincubator/create-react-app)
 
 Create React apps with no build configuration.

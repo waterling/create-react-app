@@ -1,6 +1,6 @@
 {
   "name": "@bradfordlemley/babel-preset-react-app",
-  "version": "4.0.0-plus.2",
+  "version": "4.0.0-plus.3",
   "description": "Babel preset used by Create React App",
   "repository": "github:bradfordlemley/create-react-app",
   "license": "MIT",

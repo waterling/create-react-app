@@ -1,6 +1,65 @@
-# THIS IS A FORK
+# CRA WITH SAUCE
+Add some SAUCEsomeness to your CRAwesomeness.
 
-Add some extra SAUCE-someness to your CRA-someness.
+This is a CRA fork that I use for my projects.  You can use it, too.
+
+#### Disclaimer
+It's 110% certainly an incredibly much better idea to use the [official CRA](https://github.com/facebook/create-react-app) unless you are extremely `adventurous` or `desperate`.
+
+#### Aims
+* trail official CRA releases
+* add useful features that aren't yet supported by official CRA
+* transition to official CRA features as they become available
+* die when official CRA supports all features
+
+#### Additional Features
+* Monorepo / Source Code Sharing
+   * See [Sharing Components in Monorepo]( https://github.com/facebook/create-react-app/blob/next/packages/react-scripts/template/README.md#sharing-components-in-a-monorepo)
+   * [On official 2.0 roadmap](https://github.com/facebook/create-react-app/issues/3815), [merged](https://github.com/facebook/create-react-app/pull/3741), [pre-released in 2.0 alpha](https://github.com/facebook/create-react-app/issues/3815#issuecomment-363631534)
+* App Variants, example:
+```
+app/
+  package.json:
+    "devDependencies": {
+      "@bradfordlemley/react-scripts": "2.0.0-next.be84d03e"
+    },
+    "targets": {
+      "ios": {   <-- configure ios variant
+        "jsExts": [
+          ".ios.js",
+          ".cor.js"
+        ],
+        "appHtml": "index.cor.html"
+      },
+      "android": {  <-- configure android variant
+        "jsExts": [
+          ".android.js",
+          ".cor.js"
+        ],
+        "appHtml": "index.cor.html"
+      },
+    },
+    "scripts": {
+      "build": "react-scripts build", <-- standard build
+      "build:android": "TARGET=android react-scripts build",  <-- build android
+      "build:ios": "TARGET=ios react-scripts build"  <-- build ios
+    }
+  src/
+    comp1.js  <-- standard build
+    comp1.android.js <-- TARGET=android build
+    comp1.cor.js <-- fallback for both ios and android builds
+    comp1.ios.js <-- TARGET=ios build
+  public/
+    index.html <-- standard build
+    index.cor.html <-- TARGET=ios build
+  build/ <-- standard build output
+  build_android/  <-- output for TARGET=android build
+  build_ios/  <-- output for TARGET=ios build
+```
+
+#### Other Forks and Extensions
+* [custom-react-scripts](https://github.com/kitze/custom-react-scripts)
+* [react-app-rewire-babel-loader](https://github.com/dashed/react-app-rewire-babel-loader)
 
 # Create React App [![Build Status](https://travis-ci.org/facebookincubator/create-react-app.svg?branch=master)](https://travis-ci.org/facebookincubator/create-react-app)
 

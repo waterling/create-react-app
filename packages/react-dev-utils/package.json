@@ -1,6 +1,6 @@
 {
   "name": "@bradfordlemley/react-dev-utils",
-  "version": "6.0.0-plus.1",
+  "version": "6.0.0-plus.2",
   "description": "Webpack utilities used by Create React App",
   "repository": "github:bradfordlemley/create-react-app",
   "license": "MIT",
@@ -38,7 +38,7 @@
   ],
   "dependencies": {
     "@babel/code-frame": "7.0.0-beta.38",
-    "@bradfordlemley/react-error-overlay": "^5.0.0-plus.1",
+    "@bradfordlemley/react-error-overlay": "^5.0.0-plus.2",
     "address": "1.0.3",
     "browserslist": "2.11.3",
     "chalk": "2.3.0",

@@ -30,7 +30,7 @@ In an existing CRA app that uses react-scripts:
 app/
   package.json:
     "devDependencies": {
-      "@bradfordlemley/react-scripts": "2.0.0-next.be84d03e"
+      "@bradfordlemley/react-scripts": "^2.0.0-plus.11"
     },
     "targets": {
       "ios": {   <-- configure ios variant

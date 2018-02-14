@@ -6,7 +6,7 @@ See [github repo](https://github.com/bradfordlemley/create-react-app) for more i
 # TL;DR
 This provides ```react-scripts-plus```, a replacement for ```react-scripts```.
 
-It is nearly identical to react-scripts, but adds some [extra features](#extra_features) not yet available in the standard react-scripts.
+It is nearly identical to react-scripts, but adds some [extra features](#extra-features) not yet available in the standard react-scripts.
 
 # Disclaimer
 It's a much better idea to use the [official CRA](https://github.com/facebook/create-react-app) react-scripts unless you are extremely adventurous or desperate.
@@ -36,7 +36,7 @@ In an existing CRA app that uses react-scripts:
 app/
   package.json:
     "devDependencies": {
-      "@bradfordlemley/react-scripts": "2.0.0-next.be84d03e"
+      "@bradfordlemley/react-scripts": "^2.0.0-plus.11"
     },
     "targets": {
       "ios": {   <-- configure ios variant
@@ -55,9 +55,9 @@ app/
       },
     },
     "scripts": {
-      "build": "react-scripts build", <-- standard build
-      "build:android": "TARGET=android react-scripts build",  <-- build android
-      "build:ios": "TARGET=ios react-scripts build"  <-- build ios
+      "build": "react-scripts-plus build", <-- standard build
+      "build:android": "TARGET=android react-scripts-plus build",  <-- build android hybrid
+      "build:ios": "TARGET=ios react-scripts-plus build"  <-- build ios hybrid
     }
   src/
     comp1.js  <-- standard build

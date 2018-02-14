@@ -4,7 +4,7 @@ Add some SAUCEsomeness to your CRAwesomeness.
 This is a CRA fork that I use for my projects.  You can use it, too.
 
 #### Disclaimer
-It's 110% certainly an incredibly much better idea to use the [official CRA](https://github.com/facebook/create-react-app) unless you are extremely `adventurous` or `desperate`.
+It's a much better idea to use the [official CRA](https://github.com/facebook/create-react-app) unless you are extremely adventurous or desperate.
 
 #### Aims
 * trail official CRA releases
@@ -15,7 +15,7 @@ It's 110% certainly an incredibly much better idea to use the [official CRA](htt
 #### Additional Features
 * Monorepo / Source Code Sharing
    * See [Sharing Components in Monorepo]( https://github.com/facebook/create-react-app/blob/next/packages/react-scripts/template/README.md#sharing-components-in-a-monorepo)
-   * [On official 2.0 roadmap](https://github.com/facebook/create-react-app/issues/3815), [merged](https://github.com/facebook/create-react-app/pull/3741), [pre-released in 2.0 alpha](https://github.com/facebook/create-react-app/issues/3815#issuecomment-363631534)
+   * On [RS 2.0 roadmap](https://github.com/facebook/create-react-app/issues/3815), [merged](https://github.com/facebook/create-react-app/pull/3741), [pre-released](https://github.com/facebook/create-react-app/issues/3815#issuecomment-363631534)
 * App Variants, example:
 ```
 app/

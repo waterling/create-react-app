@@ -12,15 +12,20 @@ It's a much better idea to use the [official CRA](https://github.com/facebook/cr
 * transition to official CRA features as they become available
 * die when official CRA supports all features
 
-#### How to
-* yarn add @bradfordlemley/react-scripts
-* Replace react-scripts with react-scripts-plus, e.g.: "build": "react-scripts-plus build"
+#### Getting Started
+In an existing CRA app that uses react-scripts:
+* ```yarn add @bradfordlemley/react-scripts --exact --dev```
+   * This won't overwrite the standard react-scripts, but you'll probably only be able to have react-scripts or @bradfordlemley/react-scripts, not both, because they likely include conflicting versions of jest, so:
+   * ```yarn remove react-scripts```
+* Replace standard ```react-scripts``` calls with ```react-scripts-plus```, e.g.:
+   * "build": "react-scripts-plus build"
 
 #### Additional Features
 * Monorepo / Source Code Sharing
    * See [Sharing Components in Monorepo]( https://github.com/facebook/create-react-app/blob/next/packages/react-scripts/template/README.md#sharing-components-in-a-monorepo)
    * On [RS 2.0 roadmap](https://github.com/facebook/create-react-app/issues/3815), [merged](https://github.com/facebook/create-react-app/pull/3741), [pre-released](https://github.com/facebook/create-react-app/issues/3815#issuecomment-363631534)
-* App Variants, example:
+* App Variants
+   * this can be used for producing slight differences in an app, e.g. to support an admin variant of the app or a hybrid version of the app.
 ```
 app/
   package.json:

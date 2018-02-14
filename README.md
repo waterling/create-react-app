@@ -28,42 +28,42 @@ In an existing CRA app that uses react-scripts:
    * this can be used for producing slight differences in an app, e.g. to support an admin variant of the app or a hybrid version of the app.
 ```
 app/
-package.json:
-"devDependencies": {
-"@bradfordlemley/react-scripts": "2.0.0-next.be84d03e"
-},
-"targets": {
-"ios": {   <-- configure ios variant
-"jsExts": [
-".ios.js",
-".cor.js"
-],
-"appHtml": "index.cor.html"
-},
-"android": {  <-- configure android variant
-"jsExts": [
-".android.js",
-".cor.js"
-],
-"appHtml": "index.cor.html"
-},
-},
-"scripts": {
-"build": "react-scripts build", <-- standard build
-"build:android": "TARGET=android react-scripts build",  <-- build android
-"build:ios": "TARGET=ios react-scripts build"  <-- build ios
-}
-src/
-comp1.js  <-- standard build
-comp1.android.js <-- TARGET=android build
-comp1.cor.js <-- fallback for both ios and android builds
-comp1.ios.js <-- TARGET=ios build
-public/
-index.html <-- standard build
-index.cor.html <-- TARGET=ios build
-build/ <-- standard build output
-build_android/  <-- output for TARGET=android build
-build_ios/  <-- output for TARGET=ios build
+  package.json:
+    "devDependencies": {
+      "@bradfordlemley/react-scripts": "^2.0.0-plus.11"
+    },
+    "targets": {
+      "ios": {   <-- configure ios variant
+        "jsExts": [
+          ".ios.js",
+          ".cor.js"
+        ],
+        "appHtml": "index.cor.html"
+      },
+      "android": {  <-- configure android variant
+        "jsExts": [
+          ".android.js",
+          ".cor.js"
+        ],
+        "appHtml": "index.cor.html"
+      },
+    },
+    "scripts": {
+      "build": "react-scripts build", <-- standard build
+      "build:android": "TARGET=android react-scripts build",  <-- build android
+      "build:ios": "TARGET=ios react-scripts build"  <-- build ios
+    }
+  src/
+    comp1.js  <-- standard build
+    comp1.android.js <-- TARGET=android build
+    comp1.cor.js <-- fallback for both ios and android builds
+    comp1.ios.js <-- TARGET=ios build
+  public/
+    index.html <-- standard build
+    index.cor.html <-- TARGET=ios build
+  build/ <-- standard build output
+  build_android/  <-- output for TARGET=android build
+  build_ios/  <-- output for TARGET=ios build
 ```
 
 #### Other Forks and Extensions

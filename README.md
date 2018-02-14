@@ -12,6 +12,10 @@ It's a much better idea to use the [official CRA](https://github.com/facebook/cr
 * transition to official CRA features as they become available
 * die when official CRA supports all features
 
+#### How to
+* yarn add @bradfordlemley/react-scripts
+* Replace react-scripts with react-scripts-plus, e.g.: "build": "react-scripts-plus build"
+
 #### Additional Features
 * Monorepo / Source Code Sharing
    * See [Sharing Components in Monorepo]( https://github.com/facebook/create-react-app/blob/next/packages/react-scripts/template/README.md#sharing-components-in-a-monorepo)

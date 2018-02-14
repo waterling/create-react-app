@@ -49,9 +49,9 @@ app/
       },
     },
     "scripts": {
-      "build": "react-scripts build", <-- standard build
-      "build:android": "TARGET=android react-scripts build",  <-- build android
-      "build:ios": "TARGET=ios react-scripts build"  <-- build ios
+      "build": "react-scripts-plus build", <-- standard build
+      "build:android": "TARGET=android react-scripts-plus build",  <-- build android
+      "build:ios": "TARGET=ios react-scripts-plus build"  <-- build ios
     }
   src/
     comp1.js  <-- standard build

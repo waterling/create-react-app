@@ -49,21 +49,25 @@ app/
       },
     },
     "scripts": {
-      "build": "react-scripts-plus build", <-- standard build
-      "build:android": "TARGET=android react-scripts-plus build",  <-- build android
-      "build:ios": "TARGET=ios react-scripts-plus build"  <-- build ios
+      "build": "react-scripts-plus build", // standard build
+      "build:android": "TARGET=android react-scripts-plus build",  // build android
+      "build:ios": "TARGET=ios react-scripts-plus build" // build ios
     }
   src/
-    comp1.js  <-- standard build
-    comp1.android.js <-- TARGET=android build
-    comp1.cor.js <-- fallback for both ios and android builds
-    comp1.ios.js <-- TARGET=ios build
+    App.js
+      import comp1 from './comp1';
+      import comp2 from './comp2';
+    comp1.js  // standard build
+    comp1.android.js // used for TARGET=android build
+    comp1.ios.js     // used for TARGET=ios build
+    comp2.js         // standard build
+    comp2.cor.js     // used for both ios and android builds
   public/
-    index.html <-- standard build
-    index.cor.html <-- TARGET=ios build
-  build/ <-- standard build output
-  build_android/  <-- output for TARGET=android build
-  build_ios/  <-- output for TARGET=ios build
+    index.html // standard build
+    index.cor.html // TARGET=ios build
+  build/ // build output for standard build
+  build_android/  // build output for TARGET=android
+  build_ios/  // build output for TARGET=ios
 ```
 
 #### Other Forks and Extensions

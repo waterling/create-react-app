@@ -21,11 +21,11 @@ In an existing CRA app that uses react-scripts:
    * "build": "react-scripts-plus build"
 
 #### Additional Features
-* Monorepo / Source Code Sharing
+##### Monorepo / Source Code Sharing
    * See [Sharing Components in Monorepo]( https://github.com/facebook/create-react-app/blob/next/packages/react-scripts/template/README.md#sharing-components-in-a-monorepo)
    * On [RS 2.0 roadmap](https://github.com/facebook/create-react-app/issues/3815), [merged](https://github.com/facebook/create-react-app/pull/3741), [pre-released](https://github.com/facebook/create-react-app/issues/3815#issuecomment-363631534)
-* App Variants
-   * this can be used for producing slight differences in an app, e.g. to support an admin variant of the app or a hybrid version of the app.
+##### App Variants
+This feature can be used for producing slight differences in an app, e.g. to support an admin variant of the app or a hybrid version of the app.
 ```
 app/
   package.json:

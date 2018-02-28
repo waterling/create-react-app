@@ -133,7 +133,7 @@ module.exports = {
             // https://github.com/facebook/create-react-app/issues/2376
             // Pending further investigation:
             // https://github.com/mishoo/UglifyJS2/issues/2011
-            comparisons: false,
+            drop_console: env.raw.REACT_APP_DROP_CONSOLE,
           },
           mangle: {
             safari10: true,

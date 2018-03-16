@@ -404,7 +404,7 @@ module.exports = {
       uglifyOptions: {
         ecma: 8,
         compress: {
-          drop_console: env.raw.REACT_APP_DROP_CONSOLE,
+          drop_console: Boolean(env.raw.REACT_APP_DROP_CONSOLE === 'true'),
           warnings: false,
           // Disabled because of an issue with Uglify breaking seemingly valid code:
           // https://github.com/facebookincubator/create-react-app/issues/2376

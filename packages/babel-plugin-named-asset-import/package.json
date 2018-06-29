@@ -13,5 +13,8 @@
   ],
   "peerDependencies": {
     "@babel/core": "7.0.0-beta.46"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

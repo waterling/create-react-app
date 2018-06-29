@@ -278,10 +278,14 @@ module.exports = {
                   // @remove-on-eject-begin
                   babelrc: false,
                   // @remove-on-eject-end
-                  presets: [require.resolve('@bradfordlemley/babel-preset-react-app')],
+                  presets: [
+                    require.resolve('@bradfordlemley/babel-preset-react-app'),
+                  ],
                   plugins: [
                     [
-                      require.resolve('babel-plugin-named-asset-import'),
+                      require.resolve(
+                        '@bradfordlemley/babel-plugin-named-asset-import'
+                      ),
                       {
                         loaderMap: {
                           svg: {

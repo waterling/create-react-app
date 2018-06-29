@@ -235,7 +235,7 @@ module.exports = {
               {
                 loader: require.resolve('thread-loader'),
                 options: {
-                  poolTimeout: Infinity // keep workers alive for more effective watch mode
+                  poolTimeout: Infinity, // keep workers alive for more effective watch mode
                 },
               },
               {
@@ -244,10 +244,14 @@ module.exports = {
                   // @remove-on-eject-begin
                   babelrc: false,
                   // @remove-on-eject-end
-                  presets: [require.resolve('@bradfordlemley/babel-preset-react-app')],
+                  presets: [
+                    require.resolve('@bradfordlemley/babel-preset-react-app'),
+                  ],
                   plugins: [
                     [
-                      require.resolve('babel-plugin-named-asset-import'),
+                      require.resolve(
+                        '@bradfordlemley/babel-plugin-named-asset-import'
+                      ),
                       {
                         loaderMap: {
                           svg: {
@@ -276,7 +280,7 @@ module.exports = {
               {
                 loader: require.resolve('thread-loader'),
                 options: {
-                  poolTimeout: Infinity // keep workers alive for more effective watch mode
+                  poolTimeout: Infinity, // keep workers alive for more effective watch mode
                 },
               },
               {

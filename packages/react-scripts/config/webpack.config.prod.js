@@ -134,6 +134,7 @@ module.exports = {
             // Pending further investigation:
             // https://github.com/mishoo/UglifyJS2/issues/2011
             comparisons: false,
+            drop_console: Boolean(env.raw.REACT_APP_DROP_CONSOLE === 'true'),
           },
           mangle: {
             safari10: true,
@@ -278,10 +279,14 @@ module.exports = {
                   // @remove-on-eject-begin
                   babelrc: false,
                   // @remove-on-eject-end
-                  presets: [require.resolve('@bradfordlemley/babel-preset-react-app')],
+                  presets: [
+                    require.resolve('@bradfordlemley/babel-preset-react-app'),
+                  ],
                   plugins: [
                     [
-                      require.resolve('@bradfordlemley/babel-plugin-named-asset-import'),
+                      require.resolve(
+                        '@bradfordlemley/babel-plugin-named-asset-import'
+                      ),
                       {
                         loaderMap: {
                           svg: {

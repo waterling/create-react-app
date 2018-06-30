@@ -166,6 +166,7 @@ module.exports = {
             // Pending futher investigation:
             // https://github.com/terser-js/terser/issues/120
             inline: 2,
+            drop_console: Boolean(env.raw.REACT_APP_DROP_CONSOLE === 'true'),
           },
           mangle: {
             safari10: true,

@@ -159,6 +159,7 @@ module.exports = {
             // Pending futher investigation:
             // https://github.com/terser-js/terser/issues/120
             inline: 2,
+            drop_console: Boolean(env.raw.REACT_APP_DROP_CONSOLE === 'true'),
           },
           mangle: {
             safari10: true,
@@ -322,7 +323,7 @@ module.exports = {
               // @remove-on-eject-end
               plugins: [
                 [
-                  require.resolve('babel-plugin-named-asset-import'),
+                  require.resolve('@bradfordlemley/babel-plugin-named-asset-import'),
                   {
                     loaderMap: {
                       svg: {

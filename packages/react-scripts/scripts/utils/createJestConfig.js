@@ -30,19 +30,13 @@ module.exports = (resolve, rootDir, srcRoots) => {
     // But we can't simply emit this because it'll be an absolute path.
     // The proper fix is to write jest.config.js on eject instead of a package.json key.
     // Then these can always stay as require.resolve()s.
-    resolver: isEjecting
-      ? 'jest-pnp-resolver'
-      : require.resolve('jest-pnp-resolver'),
-    setupFiles: [
-      isEjecting
-        ? 'react-app-polyfill/jsdom'
-        : require.resolve('react-app-polyfill/jsdom'),
-    ],
+    resolver: require.resolve('jest-pnp-resolver'),
+    setupFiles: [require.resolve('react-app-polyfill/jsdom')],
 
     setupTestFrameworkScriptFile: setupTestsFile,
     testMatch: [
-      '<rootDir>/src/**/__tests__/**/*.{js,jsx,mjs}',
-      '<rootDir>/src/**/?(*.)(spec|test).{js,jsx,mjs}',
+      '**/__tests__/**/*.{js,jsx,mjs}',
+      '**/?(*.)(spec|test).{js,jsx,mjs}',
     ],
     // where to search for files/tests
     roots: srcRoots.map(toRelRootDir),

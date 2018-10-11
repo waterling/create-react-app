@@ -20,6 +20,8 @@ environment:
       test_suite: 'kitchensink'
     - nodejs_version: 8
       test_suite: 'kitchensink-eject'
+    - nodejs_version: 8
+      test_suite: "monorepos"
 cache:
   - '%APPDATA%\npm-cache -> appveyor.cleanup-cache.txt'
   - '%LOCALAPPDATA%\Yarn\Cache -> appveyor.cleanup-cache.txt'

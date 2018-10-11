@@ -185,11 +185,11 @@ module.exports = {
             options: {
               formatter: require.resolve('react-dev-utils/eslintFormatter'),
               eslintPath: require.resolve('eslint'),
-              // @remove-on-eject-begin
               baseConfig: {
                 extends: [require.resolve('eslint-config-react-app')],
                 settings: { react: { version: '999.999.999' } },
               },
+              // @remove-on-eject-begin
               ignore: false,
               useEslintrc: false,
               // @remove-on-eject-end
@@ -197,7 +197,8 @@ module.exports = {
             loader: require.resolve('eslint-loader'),
           },
         ],
-        include: paths.appSrc,
+        include: paths.srcPaths,
+        exclude: [/[/\\\\]node_modules[/\\\\]/],
       },
       {
         // "oneOf" will traverse all following loaders until one will
@@ -219,7 +220,8 @@ module.exports = {
           // The preset includes JSX, Flow, and some ESnext features.
           {
             test: /\.(js|mjs|jsx)$/,
-            include: paths.appSrc,
+            include: paths.srcPaths,
+            exclude: [/[/\\\\]node_modules[/\\\\]/],
             loader: require.resolve('babel-loader'),
             options: {
               customize: require.resolve(

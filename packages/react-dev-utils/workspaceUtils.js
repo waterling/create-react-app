@@ -30,23 +30,29 @@ const findPkgs = (rootPath, globPatterns) => {
 };
 
 const findMonorepo = appDir => {
+  const appPkg = JSON.parse(
+    fs.readFileSync(path.resolve(appDir, 'package.json'))
+  );
   const monoPkgPath = findPkg.sync(path.resolve(appDir, '..'));
   const monoRootPath = monoPkgPath && path.dirname(monoPkgPath);
   const monoPkg = monoPkgPath && require(monoPkgPath);
   const patterns = monoPkg && monoPkg.workspaces;
   const isYarnWs = Boolean(patterns);
+  const srcPatterns = appPkg && appPkg.sourceWorkspaces;
   const allPkgs = patterns && findPkgs(monoRootPath, patterns);
+  const allSrcPkgs =
+    srcPatterns && findPkgs(path.dirname(monoPkgPath), srcPatterns);
   const isIncluded = dir => allPkgs && allPkgs.indexOf(dir) !== -1;
   const isAppIncluded = isIncluded(appDir);
-  const pkgs = allPkgs
-    ? allPkgs.filter(f => fs.realpathSync(f) !== appDir)
+  const srcPkgPaths = allSrcPkgs
+    ? allSrcPkgs.filter(f => fs.realpathSync(f) !== appDir)
     : [];
 
   return {
     isAppIncluded,
     isYarnWs,
-    pkgs,
     rootPath: monoRootPath,
+    srcPkgPaths,
   };
 };
 

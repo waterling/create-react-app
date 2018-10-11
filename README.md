@@ -1,9 +1,101 @@
+This is a CRA fork that I use for my projects. You can use it, too.
+
+# CRA WITH SAUCE
+
+Add some SAUCEsomeness to your CRAwesomeness, supporting:
+
+- Monorepos -- transpile other packages in your monorepo
+- App variants -- react-native-build-like overrides, e.g. special_thing.ios.js, but configurable
+
+#### Disclaimer
+
+It's a much better idea to use the [official CRA](https://github.com/facebook/create-react-app) unless you are extremely adventurous or desperate.
+
+#### Aims
+
+- trail official CRA releases, current version: 2.0.4 (10-Oct-2018)
+- add useful features that aren't yet supported by official CRA
+- transition to official CRA features as they become available
+- die when official CRA supports all features
+
+#### Getting Started
+
+In an existing CRA app that uses react-scripts:
+
+- `yarn add @bradfordlemley/react-scripts --dev`
+- Replace `react-scripts` calls in package.json with `react-scripts-plus`, e.g.: `"build": "react-scripts-plus build"`
+
+Note: You can install and use react-scripts-plus alongside react-scripts, but since it includes everything from react-scripts and more, you shouldn't need to have react-scripts.
+
+- If you do want to install both, you should use the same (or very close) versions (e.g. react-scripts@2.0.4 and @bradfordlemley/react-scripts@2.0.4) in order to use the same dependency versions (e.g. jest) and avoid issues with react-scripts preflight checks.
+
+#### Additional Features
+
+##### Monorepo / Source Code Sharing
+
+- See [Sharing Components in Monorepo](https://github.com/facebook/create-react-app/blob/next/packages/react-scripts/template/README.md#sharing-components-in-a-monorepo)
+- On [RS 2.0 roadmap](https://github.com/facebook/create-react-app/issues/3815), [merged](https://github.com/facebook/create-react-app/pull/3741), [pre-released](https://github.com/facebook/create-react-app/issues/3815#issuecomment-363631534)
+- Unfortunately, this was reverted from the official CRA 2.0.
+
+##### App Variants
+
+This feature can be used for producing slight differences in an app, e.g. to support an admin variant of the app or a hybrid version of the app.
+
+```
+app/
+  package.json:
+    "devDependencies": {
+      "@bradfordlemley/react-scripts": "^2.0.0-plus.11"
+    },
+    "targets": {
+      "ios": {   <-- configure ios variant
+        "jsExts": [
+          ".ios.js",
+          ".cor.js"
+        ],
+        "appHtml": "index.cor.html"
+      },
+      "android": {  <-- configure android variant
+        "jsExts": [
+          ".android.js",
+          ".cor.js"
+        ],
+        "appHtml": "index.cor.html"
+      },
+    },
+    "scripts": {
+      "build": "react-scripts-plus build", // standard build
+      "build:android": "TARGET=android react-scripts-plus build",  // build android
+      "build:ios": "TARGET=ios react-scripts-plus build" // build ios
+    }
+  src/
+    App.js
+      import comp1 from './comp1';
+      import comp2 from './comp2';
+    comp1.js  // standard build
+    comp1.android.js // used for TARGET=android build
+    comp1.ios.js     // used for TARGET=ios build
+    comp2.js         // standard build
+    comp2.cor.js     // used for both ios and android builds
+  public/
+    index.html // standard build
+    index.cor.html // TARGET=ios build
+  build/ // build output for standard build
+  build_android/  // build output for TARGET=android
+  build_ios/  // build output for TARGET=ios
+```
+
+#### Other Forks and Extensions
+
+- [custom-react-scripts](https://github.com/kitze/custom-react-scripts)
+- [react-app-rewire-babel-loader](https://github.com/dashed/react-app-rewire-babel-loader)
+
 # Create React App [![Build Status](https://travis-ci.org/facebook/create-react-app.svg?branch=master)](https://travis-ci.org/facebook/create-react-app)
 
 Create React apps with no build configuration.
 
-* [Creating an App](#creating-an-app) – How to create a new app.
-* [User Guide](https://github.com/facebook/create-react-app/blob/master/packages/react-scripts/template/README.md) – How to develop apps bootstrapped with Create React App.
+- [Creating an App](#creating-an-app) – How to create a new app.
+- [User Guide](https://github.com/facebook/create-react-app/blob/master/packages/react-scripts/template/README.md) – How to develop apps bootstrapped with Create React App.
 
 Create React App works on macOS, Windows, and Linux.<br>
 If something doesn’t work, please [file an issue](https://github.com/facebook/create-react-app/issues/new).
@@ -16,7 +108,7 @@ cd my-app
 npm start
 ```
 
-*([npx](https://medium.com/@maybekatz/introducing-npx-an-npm-package-runner-55f7d4bd282b) comes with npm 5.2+ and higher, see [instructions for older npm versions](https://gist.github.com/gaearon/4064d3c23a77c74a3614c498a8bb1c5f))*
+_([npx](https://medium.com/@maybekatz/introducing-npx-an-npm-package-runner-55f7d4bd282b) comes with npm 5.2+ and higher, see [instructions for older npm versions](https://gist.github.com/gaearon/4064d3c23a77c74a3614c498a8bb1c5f))_
 
 Then open [http://localhost:3000/](http://localhost:3000/) to see your app.<br>
 When you’re ready to deploy to production, create a minified bundle with `npm run build`.
@@ -44,21 +136,23 @@ To create a new app, you may choose one of the following methods:
 npx create-react-app my-app
 ```
 
-*([npx](https://medium.com/@maybekatz/introducing-npx-an-npm-package-runner-55f7d4bd282b) comes with npm 5.2+ and higher, see [instructions for older npm versions](https://gist.github.com/gaearon/4064d3c23a77c74a3614c498a8bb1c5f))*
+_([npx](https://medium.com/@maybekatz/introducing-npx-an-npm-package-runner-55f7d4bd282b) comes with npm 5.2+ and higher, see [instructions for older npm versions](https://gist.github.com/gaearon/4064d3c23a77c74a3614c498a8bb1c5f))_
 
 ### npm
 
 ```sh
 npm init react-app my-app
 ```
-*`npm init <initializer>` is available in npm 6+*
+
+_`npm init <initializer>` is available in npm 6+_
 
 ### Yarn
 
 ```sh
 yarn create react-app my-app
 ```
-*`yarn create` is available in Yarn 0.25+*
+
+_`yarn create` is available in Yarn 0.25+_
 
 It will create a directory called `my-app` inside the current folder.<br>
 Inside that directory, it will generate the initial project structure and install the transitive dependencies:
@@ -173,24 +267,24 @@ Please refer to the [User Guide](https://github.com/facebook/create-react-app/bl
 
 ## Philosophy
 
-* **One Dependency:** There is just one build dependency. It uses Webpack, Babel, ESLint, and other amazing projects, but provides a cohesive curated experience on top of them.
+- **One Dependency:** There is just one build dependency. It uses Webpack, Babel, ESLint, and other amazing projects, but provides a cohesive curated experience on top of them.
 
-* **No Configuration Required:** You don't need to configure anything. Reasonably good configuration of both development and production builds is handled for you so you can focus on writing code.
+- **No Configuration Required:** You don't need to configure anything. Reasonably good configuration of both development and production builds is handled for you so you can focus on writing code.
 
-* **No Lock-In:** You can “eject” to a custom setup at any time. Run a single command, and all the configuration and build dependencies will be moved directly into your project, so you can pick up right where you left off.
+- **No Lock-In:** You can “eject” to a custom setup at any time. Run a single command, and all the configuration and build dependencies will be moved directly into your project, so you can pick up right where you left off.
 
 ## What’s Included?
 
 Your environment will have everything you need to build a modern single-page React app:
 
-* React, JSX, ES6, and Flow syntax support.
-* Language extras beyond ES6 like the object spread operator.
-* Autoprefixed CSS, so you don’t need `-webkit-` or other prefixes.
-* A fast interactive unit test runner with built-in support for coverage reporting.
-* A live development server that warns about common mistakes.
-* A build script to bundle JS, CSS, and images for production, with hashes and sourcemaps.
-* An offline-first [service worker](https://developers.google.com/web/fundamentals/getting-started/primers/service-workers) and a [web app manifest](https://developers.google.com/web/fundamentals/engage-and-retain/web-app-manifest/), meeting all the [Progressive Web App](https://github.com/facebook/create-react-app/blob/master/packages/react-scripts/template/README.md#making-a-progressive-web-app) criteria. (*Note: Using the service worker is opt-in as of `react-scripts@2.0.0` and higher*)
-* Hassle-free updates for the above tools with a single dependency.
+- React, JSX, ES6, and Flow syntax support.
+- Language extras beyond ES6 like the object spread operator.
+- Autoprefixed CSS, so you don’t need `-webkit-` or other prefixes.
+- A fast interactive unit test runner with built-in support for coverage reporting.
+- A live development server that warns about common mistakes.
+- A build script to bundle JS, CSS, and images for production, with hashes and sourcemaps.
+- An offline-first [service worker](https://developers.google.com/web/fundamentals/getting-started/primers/service-workers) and a [web app manifest](https://developers.google.com/web/fundamentals/engage-and-retain/web-app-manifest/), meeting all the [Progressive Web App](https://github.com/facebook/create-react-app/blob/master/packages/react-scripts/template/README.md#making-a-progressive-web-app) criteria. (_Note: Using the service worker is opt-in as of `react-scripts@2.0.0` and higher_)
+- Hassle-free updates for the above tools with a single dependency.
 
 Check out [this guide](https://github.com/nitishdayal/cra_closer_look) for an overview of how these tools fit together.
 
@@ -200,25 +294,25 @@ The tradeoff is that **these tools are preconfigured to work in a specific way**
 
 Create React App is a great fit for:
 
-* **Learning React** in a comfortable and feature-rich development environment.
-* **Starting new single-page React applications.**
-* **Creating examples** with React for your libraries and components.
+- **Learning React** in a comfortable and feature-rich development environment.
+- **Starting new single-page React applications.**
+- **Creating examples** with React for your libraries and components.
 
 Here’s a few common cases where you might want to try something else:
 
-* If you want to **try React** without hundreds of transitive build tool dependencies, consider [using a single HTML file or an online sandbox instead](https://reactjs.org/docs/try-react.html).
+- If you want to **try React** without hundreds of transitive build tool dependencies, consider [using a single HTML file or an online sandbox instead](https://reactjs.org/docs/try-react.html).
 
-* If you need to **integrate React code with a server-side template framework** like Rails or Django, or if you’re **not building a single-page app**, consider using [nwb](https://github.com/insin/nwb), or [Neutrino](https://neutrino.js.org/) which are more flexible. For Rails specifically, you can use [Rails Webpacker](https://github.com/rails/webpacker).
+- If you need to **integrate React code with a server-side template framework** like Rails or Django, or if you’re **not building a single-page app**, consider using [nwb](https://github.com/insin/nwb), or [Neutrino](https://neutrino.js.org/) which are more flexible. For Rails specifically, you can use [Rails Webpacker](https://github.com/rails/webpacker).
 
-* If you need to **publish a React component**, [nwb](https://github.com/insin/nwb) can [also do this](https://github.com/insin/nwb#react-components-and-libraries), as well as [Neutrino's react-components preset](https://neutrino.js.org/packages/react-components/).
+- If you need to **publish a React component**, [nwb](https://github.com/insin/nwb) can [also do this](https://github.com/insin/nwb#react-components-and-libraries), as well as [Neutrino's react-components preset](https://neutrino.js.org/packages/react-components/).
 
-* If you want to do **server rendering** with React and Node.js, check out [Next.js](https://github.com/zeit/next.js/) or [Razzle](https://github.com/jaredpalmer/razzle). Create React App is agnostic of the backend, and just produces static HTML/JS/CSS bundles.
+- If you want to do **server rendering** with React and Node.js, check out [Next.js](https://github.com/zeit/next.js/) or [Razzle](https://github.com/jaredpalmer/razzle). Create React App is agnostic of the backend, and just produces static HTML/JS/CSS bundles.
 
-* If your website is **mostly static** (for example, a portfolio or a blog), consider using [Gatsby](https://www.gatsbyjs.org/) instead. Unlike Create React App, it pre-renders the website into HTML at the build time.
+- If your website is **mostly static** (for example, a portfolio or a blog), consider using [Gatsby](https://www.gatsbyjs.org/) instead. Unlike Create React App, it pre-renders the website into HTML at the build time.
 
-* If you want to use **TypeScript**, consider using [create-react-app-typescript](https://github.com/wmonk/create-react-app-typescript).
+- If you want to use **TypeScript**, consider using [create-react-app-typescript](https://github.com/wmonk/create-react-app-typescript).
 
-* Finally, if you need **more customization**, check out [Neutrino](https://neutrino.js.org/) and its [React preset](https://neutrino.js.org/packages/react/).
+- Finally, if you need **more customization**, check out [Neutrino](https://neutrino.js.org/) and its [React preset](https://neutrino.js.org/packages/react/).
 
 All of the above tools can work with little to no configuration.
 
@@ -237,9 +331,9 @@ Check out [Create React Native App](https://github.com/react-community/create-re
 
 We are grateful to the authors of existing related projects for their ideas and collaboration:
 
-* [@eanplatter](https://github.com/eanplatter)
-* [@insin](https://github.com/insin)
-* [@mxstbr](https://github.com/mxstbr)
+- [@eanplatter](https://github.com/eanplatter)
+- [@insin](https://github.com/insin)
+- [@mxstbr](https://github.com/mxstbr)
 
 ## License
 

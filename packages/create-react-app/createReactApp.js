@@ -49,7 +49,7 @@ const url = require('url');
 const hyperquest = require('hyperquest');
 const envinfo = require('envinfo');
 const os = require('os');
-
+const findMonorepo = require('react-dev-utils/workspaceUtils').findMonorepo;
 const packageJson = require('./package.json');
 
 // These files should be allowed to remain on a failed install,
@@ -206,7 +206,7 @@ function createApp(name, verbose, version, useNpm, usePnp, template) {
     JSON.stringify(packageJson, null, 2) + os.EOL
   );
 
-  const useYarn = useNpm ? false : shouldUseYarn();
+  const useYarn = useNpm ? false : shouldUseYarn(root);
   const originalDirectory = process.cwd();
   process.chdir(root);
   if (!useYarn && !checkThatNpmCanReadCwd()) {
@@ -277,13 +277,18 @@ function createApp(name, verbose, version, useNpm, usePnp, template) {
   );
 }
 
-function shouldUseYarn() {
+function isYarnAvailable() {
   try {
     execSync('yarnpkg --version', { stdio: 'ignore' });
     return true;
   } catch (e) {
     return false;
   }
+}
+
+function shouldUseYarn(appDir) {
+  const mono = findMonorepo(appDir);
+  return (mono.isYarnWs && mono.isAppIncluded) || isYarnAvailable();
 }
 
 function install(root, useYarn, usePnp, dependencies, verbose, isOnline) {

@@ -251,7 +251,7 @@ inquirer
       }
     }
 
-    if (fs.existsSync(paths.yarnLockFile)) {
+    if (paths.useYarn) {
       const windowsCmdFilePath = path.join(
         appPath,
         'node_modules',

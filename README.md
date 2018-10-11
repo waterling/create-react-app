@@ -1,3 +1,95 @@
+This is a CRA fork that I use for my projects. You can use it, too.
+
+# CRA WITH SAUCE
+
+Add some SAUCEsomeness to your CRAwesomeness, supporting:
+
+- Monorepos -- transpile other packages in your monorepo
+- App variants -- react-native-build-like overrides, e.g. special_thing.ios.js, but configurable
+
+#### Disclaimer
+
+It's a much better idea to use the [official CRA](https://github.com/facebook/create-react-app) unless you are extremely adventurous or desperate.
+
+#### Aims
+
+- trail official CRA releases, current version: 2.0.4 (10-Oct-2018)
+- add useful features that aren't yet supported by official CRA
+- transition to official CRA features as they become available
+- die when official CRA supports all features
+
+#### Getting Started
+
+In an existing CRA app that uses react-scripts:
+
+- `yarn add @bradfordlemley/react-scripts --dev`
+- Replace `react-scripts` calls in package.json with `react-scripts-plus`, e.g.: `"build": "react-scripts-plus build"`
+
+Note: You can install and use react-scripts-plus alongside react-scripts, but since it includes everything from react-scripts and more, you shouldn't need to have react-scripts.
+
+- If you do want to install both, you should use the same (or very close) versions (e.g. react-scripts@2.0.4 and @bradfordlemley/react-scripts@2.0.4) in order to use the same dependency versions (e.g. jest) and avoid issues with react-scripts preflight checks.
+
+#### Additional Features
+
+##### Monorepo / Source Code Sharing
+
+- See [Sharing Components in Monorepo](https://github.com/facebook/create-react-app/blob/next/packages/react-scripts/template/README.md#sharing-components-in-a-monorepo)
+- On [RS 2.0 roadmap](https://github.com/facebook/create-react-app/issues/3815), [merged](https://github.com/facebook/create-react-app/pull/3741), [pre-released](https://github.com/facebook/create-react-app/issues/3815#issuecomment-363631534)
+- Unfortunately, this was reverted from the official CRA 2.0.
+
+##### App Variants
+
+This feature can be used for producing slight differences in an app, e.g. to support an admin variant of the app or a hybrid version of the app.
+
+```
+app/
+  package.json:
+    "devDependencies": {
+      "@bradfordlemley/react-scripts": "^2.0.0-plus.11"
+    },
+    "targets": {
+      "ios": {   <-- configure ios variant
+        "jsExts": [
+          ".ios.js",
+          ".cor.js"
+        ],
+        "appHtml": "index.cor.html"
+      },
+      "android": {  <-- configure android variant
+        "jsExts": [
+          ".android.js",
+          ".cor.js"
+        ],
+        "appHtml": "index.cor.html"
+      },
+    },
+    "scripts": {
+      "build": "react-scripts-plus build", // standard build
+      "build:android": "TARGET=android react-scripts-plus build",  // build android
+      "build:ios": "TARGET=ios react-scripts-plus build" // build ios
+    }
+  src/
+    App.js
+      import comp1 from './comp1';
+      import comp2 from './comp2';
+    comp1.js  // standard build
+    comp1.android.js // used for TARGET=android build
+    comp1.ios.js     // used for TARGET=ios build
+    comp2.js         // standard build
+    comp2.cor.js     // used for both ios and android builds
+  public/
+    index.html // standard build
+    index.cor.html // TARGET=ios build
+  build/ // build output for standard build
+  build_android/  // build output for TARGET=android
+  build_ios/  // build output for TARGET=ios
+```
+
+#### Other Forks and Extensions
+
+- [custom-react-scripts](https://github.com/kitze/custom-react-scripts)
+- [react-app-rewire-babel-loader](https://github.com/dashed/react-app-rewire-babel-loader)
+
 # Create React App [![Build Status](https://travis-ci.org/facebook/create-react-app.svg?branch=master)](https://travis-ci.org/facebook/create-react-app)
 
 Create React apps with no build configuration.

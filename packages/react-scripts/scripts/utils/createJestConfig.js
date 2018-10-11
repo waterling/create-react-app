@@ -15,27 +15,31 @@ const paths = require('../../config/paths');
 module.exports = (resolve, rootDir, srcRoots) => {
   // Use this instead of `paths.testsSetup` to avoid putting
   // an absolute filename into configuration after ejecting.
+  if (paths.isMonorepo) {
+    rootDir = paths.monorepoRoot;
+  }
+
+  const toRelRootDir = f => '<rootDir>/' + path.relative(rootDir || '', f);
+
   const setupTestsMatches = paths.testsSetup.match(/src\/setupTests\.(.+)/);
   const setupTestsFileExtension =
     (setupTestsMatches && setupTestsMatches[1]) || 'js';
   const setupTestsFile = fs.existsSync(paths.testsSetup)
-    ? `<rootDir>/src/setupTests.${setupTestsFileExtension}`
+    ? toRelRootDir(`src/setupTests.${setupTestsFileExtension}`)
     : undefined;
-
-  const toRelRootDir = f => '<rootDir>/' + path.relative(rootDir || '', f);
 
   // TODO: I don't know if it's safe or not to just use / as path separator
   // in Jest configs. We need help from somebody with Windows to determine this.
   const config = {
-    collectCoverageFrom: ['src/**/*.{js,jsx,ts,tsx}', '!src/**/*.d.ts'],
-
+    collectCoverageFrom: srcRoots
+      .map(root => path.join(toRelRootDir(root), '**/*.{js,jsx,ts,tsx}'))
+      .concat(['!**/build*/**', '!**/coverage*/**', '!**/*.d.ts']),
     // TODO: this breaks Yarn PnP on eject.
     // But we can't simply emit this because it'll be an absolute path.
     // The proper fix is to write jest.config.js on eject instead of a package.json key.
     // Then these can always stay as require.resolve()s.
     resolver: require.resolve('jest-pnp-resolver'),
     setupFiles: [require.resolve('react-app-polyfill/jsdom')],
-
     setupTestFrameworkScriptFile: setupTestsFile,
     testMatch: [
       '**/__tests__/**/*.{js,jsx,ts,tsx}',

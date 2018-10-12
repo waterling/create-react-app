@@ -1,6 +1,6 @@
 {
   "name": "@bradfordlemley/react-scripts",
-  "version": "2.0.401",
+  "version": "2.0.402",
   "description": "CRA plus sauce",
   "repository": "github:bradfordlemley/create-react-app",
   "license": "MIT",
@@ -22,10 +22,10 @@
   },
   "dependencies": {
     "@babel/core": "7.1.0",
-    "@bradfordlemley/babel-plugin-named-asset-import": "^0.2.2",
-    "@bradfordlemley/babel-preset-react-app": "^5.0.3",
-    "@bradfordlemley/eslint-config-react-app": "^3.0.3",
-    "@bradfordlemley/react-dev-utils": "^6.0.4",
+    "@bradfordlemley/babel-plugin-named-asset-import": "^0.2.201",
+    "@bradfordlemley/babel-preset-react-app": "^5.0.301",
+    "@bradfordlemley/eslint-config-react-app": "^3.0.301",
+    "@bradfordlemley/react-dev-utils": "^6.0.401",
     "@svgr/webpack": "2.4.1",
     "babel-core": "7.0.0-bridge.0",
     "babel-eslint": "9.0.0",

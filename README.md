@@ -31,7 +31,7 @@ This feature can be used for producing slight differences in an app, e.g. to sup
 app/
   package.json:
     "devDependencies": {
-      "@bradfordlemley/react-scripts": "^2.0.0-plus.11"
+      "@bradfordlemley/react-scripts": "2.0.402"
     },
     "targets": {
       "ios": {   <-- configure ios variant
@@ -50,9 +50,9 @@ app/
       },
     },
     "scripts": {
-      "build": "react-scripts-plus build", // standard build
-      "build:android": "TARGET=android react-scripts-plus build",  // build android
-      "build:ios": "TARGET=ios react-scripts-plus build" // build ios
+      "build": "react-scripts build", // standard build
+      "build:android": "TARGET=android react-scripts build",  // build android
+      "build:ios": "TARGET=ios react-scripts build" // build ios
     }
   src/
     App.js

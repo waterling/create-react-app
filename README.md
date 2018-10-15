@@ -3,7 +3,7 @@ This is a CRA fork that I use for my projects.  You can use it, too.
 # CRA WITH SAUCE
 Add some SAUCEsomeness to your CRAwesomeness, supporting:
 * Monorepos -- transpile other packages in your monorepo
-* App variants -- react-native-build-like overrides, e.g. special_thing.ios.js, but configurable
+* App variants -- react native -like source file overrides by extension, e.g. MyComponent.ios.js, but configurable
 
 #### Disclaimer
 It's a much better idea to use the [official CRA](https://github.com/facebook/create-react-app) unless you are extremely adventurous or desperate.

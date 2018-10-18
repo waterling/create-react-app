@@ -5,39 +5,111 @@ This is a CRA fork that I use for my projects. You can use it, too.
 Add some SAUCEsomeness to your CRAwesomeness, supporting:
 
 - Monorepos -- transpile other packages in your monorepo
-- App variants -- react-native-build-like overrides, e.g. special_thing.ios.js, but configurable
+- App variants -- react native -like source file overrides by extension, e.g. MyComponent.ios.js, but configurable
 
-#### Disclaimer
+See [Additional Features](#additional-features) for more info.
+
+## Disclaimer
 
 It's a much better idea to use the [official CRA](https://github.com/facebook/create-react-app) unless you are extremely adventurous or desperate.
 
-#### Aims
+## Goals
 
-- trail official CRA releases, current version: 2.0.4 (10-Oct-2018)
-- add useful features that aren't yet supported by official CRA
-- transition to official CRA features as they become available
-- die when official CRA supports all features
+- Trail official CRA releases
+- Add useful features that aren't yet supported by official CRA
+- Transition to official CRA features as they become available
+- Die when official CRA supports all features
 
-#### Getting Started
+## Getting Started
 
-In an existing CRA app that uses react-scripts:
+- `yarn remove react-scripts`, then `yarn add @bradfordlemley/react-scripts --exact`
+- `@bradfordlemley/react-scripts` uses the same versioning as `react-scripts`, except that the patch version is x100, e.g., `@bradfordlemley/react-scripts@2.0.401` is based on `react-scripts@2.0.4` (This allows several versions based on a single `react-scripts` release, but means `@bradfordlemley\react-scripts` itself is not semantically versioned so you should pin the exact version.)
 
-- `yarn add @bradfordlemley/react-scripts --dev`
-- Replace `react-scripts` calls in package.json with `react-scripts-plus`, e.g.: `"build": "react-scripts-plus build"`
+## Additional Features
 
-Note: You can install and use react-scripts-plus alongside react-scripts, but since it includes everything from react-scripts and more, you shouldn't need to have react-scripts.
+### Monorepo / Source Code Sharing
 
-- If you do want to install both, you should use the same (or very close) versions (e.g. react-scripts@2.0.4 and @bradfordlemley/react-scripts@2.0.4) in order to use the same dependency versions (e.g. jest) and avoid issues with react-scripts preflight checks.
+- With "monorepo support", other packages in the monorepo can be treated as app sources -- watched, linted, transpiled, and tested in the same way as if they were part of the app itself.
+- This allows you to share components between multiple apps in the monorepo, and also allows the components to be truly modular with their own dependencies, etc.
+- You can share components in a monorepo without integrated "monorepo support" -- each package needs its own build/test/etc scripts. The scripts need to be orchestrated to allow everything to be developed in parallel and the result can be a cumbersome development experience compared to integrated "monorepo support".
+- "monorepo support" was included in some CRA 2 alpha releases, but was reverted for the official CRA 2.0 release. CRA is currently recommending using [nwb](https://github.com/insin/nwb) to support component packages in the monorepo.
 
-#### Additional Features
+A typical monorepo folder structure looks like this:
 
-##### Monorepo / Source Code Sharing
+```
+monorepo/
+  apps/
+    app1/ ... import Comp1 from 'comp1'
+    app2/ ... import Comp1 from 'comp1'
+  comps/
+    comp1/
+    ...
+```
 
-- See [Sharing Components in Monorepo](https://github.com/facebook/create-react-app/blob/next/packages/react-scripts/template/README.md#sharing-components-in-a-monorepo)
-- On [RS 2.0 roadmap](https://github.com/facebook/create-react-app/issues/3815), [merged](https://github.com/facebook/create-react-app/pull/3741), [pre-released](https://github.com/facebook/create-react-app/issues/3815#issuecomment-363631534)
-- Unfortunately, this was reverted from the official CRA 2.0.
+#### How to Set Up a Monorepo
 
-##### App Variants
+Below expands on the monorepo structure above, adding the package.json files required to configure the monorepo for [yarn workspaces](https://yarnpkg.com/en/docs/workspaces).
+
+```
+monorepo/
+  package.json:
+    "workspaces": ["apps/*", "comps/*"],
+    "private": true
+  apps/
+    app1/
+      package.json:
+        "dependencies": {
+          "@myorg/comp1": ">=0.0.0",
+          "react": "^16.2.0"
+        },
+        "devDependencies": {
+          "@bradfordlemley/react-scripts": "2.0.402"
+        },
+        "sourceWorkspaces" : [
+          "comps/*"
+        ]
+      src/
+        app.js: import Comp1 from '@myorg/comp1';
+    app2/
+      package.json:
+        "dependencies": {
+          "@myorg/comp1": ">=0.0.0",
+          "react": "^16.2.0"
+        },
+        "devDependencies": {
+          "@bradfordlemley/react-scripts": "2.0.402"
+        },
+        "sourceWorkspaces" : [
+          "comps/*"
+        ]
+      src/
+        app.js: import Comp1 from '@myorg/comp1';
+  comps/
+    comp1/
+      package.json:
+        "name": "@myorg/comp1",
+        "version": "0.1.0"
+      index.js
+    comp2/
+      package.json:
+        "name": "@myorg/comp2",
+        "version": "0.1.0",
+        "dependencies": ["@myorg/comp1": ">=0.0.0"],
+        "devDependencies": ["react": "^16.2.0"]
+      index.js: import Comp1 from '@myorg/comp1';
+```
+
+- The "workspaces" entry in the top-level package.json is an array of glob patterns specifying where shared packages are located in the monorepo.
+- The "sourceWorkspaces" entry in an app's package.json is array of glob patterns similar to "workspaces", but specifying which packages in the monorepo should be treated as source.
+- The scoping prefixes, e.g. @myorg/, are not required, but are recommended, allowing you to differentiate your packages from others of the same name. See [scoped packages](https://docs.npmjs.com/misc/scope) for more info.
+- Using a package in the monorepo is accomplished in the same manner as a published npm package, by specifying the shared package as dependency.
+- In order to pick up the monorepo version of a package, the specified dependency version must semantically match the package version in the monorepo. See [semver](https://docs.npmjs.com/misc/semver) for info on semantic version matching.
+
+#### Lerna and Publishing
+
+[Lerna](https://github.com/lerna/lerna) is a popular tool for managing monorepos. Lerna can be configured to use yarn workspaces, so it will work with the monorepo structure above. It's important to note that while lerna helps publish various packages in a monorepo, react-scripts does nothing to help publish a component to npm. A component which uses JSX or ES6+ features would need to be built by another tool before it can be published to npm. See [publishing components to npm](#publishing-components-to-npm) for more info.
+
+### App Variants
 
 This feature can be used for producing slight differences in an app, e.g. to support an admin variant of the app or a hybrid version of the app.
 
@@ -45,7 +117,7 @@ This feature can be used for producing slight differences in an app, e.g. to sup
 app/
   package.json:
     "devDependencies": {
-      "@bradfordlemley/react-scripts": "^2.0.0-plus.11"
+      "@bradfordlemley/react-scripts": "2.0.402"
     },
     "targets": {
       "ios": {   <-- configure ios variant
@@ -64,9 +136,9 @@ app/
       },
     },
     "scripts": {
-      "build": "react-scripts-plus build", // standard build
-      "build:android": "TARGET=android react-scripts-plus build",  // build android
-      "build:ios": "TARGET=ios react-scripts-plus build" // build ios
+      "build": "react-scripts build", // standard build
+      "build:android": "TARGET=android react-scripts build",  // build android
+      "build:ios": "TARGET=ios react-scripts build" // build ios
     }
   src/
     App.js
@@ -75,11 +147,11 @@ app/
     comp1.js  // standard build
     comp1.android.js // used for TARGET=android build
     comp1.ios.js     // used for TARGET=ios build
-    comp2.js         // standard build
+    comp2.js         // used for standard build
     comp2.cor.js     // used for both ios and android builds
   public/
     index.html // standard build
-    index.cor.html // TARGET=ios build
+    index.cor.html // used for both ios and android builds
   build/ // build output for standard build
   build_android/  // build output for TARGET=android
   build_ios/  // build output for TARGET=ios

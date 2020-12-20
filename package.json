@@ -1,5 +1,6 @@
 {
-  "version": "2.0.407",
+  "version": "2.0.408",
+  "name": "@waterling/react-scripts",
   "private": true,
   "workspaces": [
     "packages/*"
